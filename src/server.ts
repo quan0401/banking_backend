@@ -1,5 +1,6 @@
 import { consoleLogger } from '@quan0401/ecommerce-shared';
 import compression from 'compression';
+import cookieSession from 'cookie-session';
 import cors from 'cors';
 import { Application, json, urlencoded } from 'express';
 import helmet from 'helmet';
@@ -8,6 +9,7 @@ import { Server } from 'http';
 import { Logger } from 'winston';
 import { connectDatabae } from '~/database';
 import { appRoutes } from '~/routes';
+import { config } from './config';
 
 const PORT = 6969;
 const log: Logger = consoleLogger('AppServer', 'debug');
@@ -32,13 +34,23 @@ export class AppServer {
     app.use(urlencoded({ extended: true, limit: '200mb' }));
   }
   private securityMiddleware(app: Application): void {
+    app.use(
+      cookieSession({
+        name: 'session',
+        keys: [config.SECRET_KEY_ONE!, config.SECRET_KEY_TWO!],
+        maxAge: 3600 * 1000,
+        secure: config.NODE_ENV !== 'develop'
+        // sameSite: 'none'
+      })
+    );
     app.use(hpp());
     app.use(helmet());
     app.use(
       cors({
         origin: '*',
         credentials: true,
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        optionsSuccessStatus: 200
       })
     );
   }
