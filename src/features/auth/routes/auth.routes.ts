@@ -10,6 +10,7 @@ class AuthRoutes {
   }
   public routes(): Router {
     this.router.post('/signup', Signup.prototype.signup);
+
     this.router.get('/test', async (req, res) => {
       const result = await AuthModel.findAll();
       res.status(200).json({ message: 'All users', users: result });

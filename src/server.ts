@@ -1,25 +1,32 @@
-import { consoleLogger } from '@quan0401/ecommerce-shared';
+import { consoleLogger, CustomeError, IErrorResponse } from '@quan0401/ecommerce-shared';
 import compression from 'compression';
 import cookieSession from 'cookie-session';
 import cors from 'cors';
-import { Application, json, urlencoded } from 'express';
+import { Application, json, NextFunction, Request, Response, urlencoded } from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import { Server } from 'http';
+import 'express-async-errors';
 import { Logger } from 'winston';
 import { connectDatabae } from '~/database';
-import { appRoutes } from '~/routes';
+import applicationRoutes from '~/routes';
 import { config } from './config';
+import { StatusCodes } from 'http-status-codes';
 
 const PORT = 6969;
 const log: Logger = consoleLogger('AppServer', 'debug');
 
 export class AppServer {
-  public start(app: Application): void {
-    this.startHttpServer(app);
-    this.securityMiddleware(app);
-    this.standardMiddleware(app);
-    this.routesMiddleware(app);
+  private app: Application;
+  constructor(app: Application) {
+    this.app = app;
+  }
+  public start(): void {
+    this.securityMiddleware(this.app);
+    this.standardMiddleware(this.app);
+    this.routesMiddleware(this.app);
+    this.globalErrorHandler(this.app);
+    this.startHttpServer(this.app);
     connectDatabae();
   }
   private startHttpServer(app: Application): void {
@@ -49,12 +56,27 @@ export class AppServer {
       cors({
         origin: '*',
         credentials: true,
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        optionsSuccessStatus: 200
+        optionsSuccessStatus: 200,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
       })
     );
   }
   private routesMiddleware(app: Application): void {
-    appRoutes(app);
+    applicationRoutes(app);
+  }
+  private globalErrorHandler(app: Application): void {
+    app.all('*', (req: Request, res: Response) => {
+      res.status(StatusCodes.NOT_FOUND).send('What!!! this route is not existed');
+    });
+
+    app.use((err: IErrorResponse, req: Request, res: Response, next: NextFunction) => {
+      log.error(err);
+
+      if (err instanceof CustomeError) {
+        // Send back to the client
+        return res.status(StatusCodes.BAD_REQUEST).json(err.serializeError());
+      }
+      next();
+    });
   }
 }

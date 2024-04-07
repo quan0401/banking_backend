@@ -7,72 +7,11 @@ POST {{baseUrl}}/{{urlPath}}/signup
 Content-Type: application/json
 withCredentials: true
 
-#  http://localhost:6969/api/v1/signup (POST method)
-
 {
-  "username": "username",
-  "password": "password",
-  "email": "email",
-  "country": "country",
+  "username": "quandepzai",
+  "password": "quan0401",
+  "email": "dongminhquan2004@gmail.com",
+  "country": "VN",
   "phone": "0938555505",
   "profilePicture": "profilePicture"
 }
-
-###
-GET {{baseUrl}}/{{urlPath}}/test
-Content-Type: application/json
-withCredentials: true
-
-{}
-
-
-###
-POST {{baseUrl}}/{{urlPath}}/signin
-Content-Type: application/json
-withCredentials: true
-
-{
-  "email": "dongminhquan2004@gmail.com",
-  "password": "quan0401"
-}
-
-###
-POST {{baseUrl}}/{{urlPath}}/signin
-Content-Type: application/json
-withCredentials: true
-
-{
-  "username": "tram",
-  "password": "quan0401"
-}
-
-###
-POST {{baseUrl}}/{{urlPath}}/signin
-Content-Type: application/json
-withCredentials: true
-
-{
-  "username": "test",
-  "password": "quan0401"
-}
-
-###
-POST {{baseUrl}}/{{urlPath}}/forgot-password
-Content-Type: application/json
-withCredentials: true
-
-{
-  "email": "dongminhquan2004@gmail.com"
-}
-
-###
-POST {{baseUrl}}/{{urlPath}}/reset-password/aae05b5221762696868760b44370d423f30dd076
-Content-Type: application/json
-withCredentials: true
-
-{
-  "password": "quan0401",
-  "confirmPassword": "quan0401"
-}
-
-# http://localhost:3000/reset-password/aae05b5221762696868760b44370d423f30dd076
