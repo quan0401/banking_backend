@@ -28,7 +28,7 @@ export interface IAuthDocument {
   profilePublicId?: string;
   username?: string;
   email?: string;
-  phone: string;
+  phone?: string;
   password?: string;
   country?: string;
   profilePicture?: string;

@@ -70,11 +70,14 @@ export class AppServer {
     });
 
     app.use((err: IErrorResponse, req: Request, res: Response, next: NextFunction) => {
+      console.log(err);
       log.error(err);
 
       if (err instanceof CustomeError) {
         // Send back to the client
         return res.status(StatusCodes.BAD_REQUEST).json(err.serializeError());
+      } else {
+        log.error(err);
       }
       next();
     });

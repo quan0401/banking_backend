@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { Signin } from '~auth/controllers/signin';
 import { Signup } from '~auth/controllers/signup';
 import { AuthModel } from '~auth/models/auth.model';
 
@@ -10,6 +11,7 @@ class AuthRoutes {
   }
   public routes(): Router {
     this.router.post('/signup', Signup.prototype.signup);
+    this.router.post('/signin', Signin.prototype.user);
 
     this.router.get('/test', async (req, res) => {
       const result = await AuthModel.findAll();

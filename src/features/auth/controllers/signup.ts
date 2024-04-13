@@ -14,6 +14,9 @@ export class Signup {
   @joiValidation(signupScheme)
   public async signup(req: Request, res: Response): Promise<void> {
     const { username, password, email, phone, country, profilePicture } = req.body as ISignUpPayload;
+    const isExisted = await authService.findUserByEmailOrPhone(phone, email);
+    if (isExisted) throw new BadRequestError('User already exists', 'Signup');
+
     const profilePublicId: string = uuidv4();
     const randomBytes: Buffer = crypto.randomBytes(20);
     const randomCharacters: string = randomBytes.toString('hex');

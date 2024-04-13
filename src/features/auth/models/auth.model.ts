@@ -1,5 +1,5 @@
+import { IAuthDocument } from '~auth/interfaces/auth.interface';
 import { DataTypes, Optional, ModelDefined, CreateOptions, Model, InferAttributes, InferCreationAttributes } from 'sequelize';
-import { IAuthDocument } from '@quan0401/ecommerce-shared';
 import { compare, hash } from 'bcryptjs';
 import { sequelize } from '~/database';
 
@@ -10,6 +10,7 @@ interface AuthModelInstanceMethods extends Model {
     hashPassword: (password: string) => Promise<string>;
   };
 }
+
 type AuthCreationAttributes = Optional<IAuthDocument, 'id' | 'createdAt' | 'password' | 'passwordResetToken' | 'passwordResetExpires'>;
 
 export const AuthModel: ModelDefined<IAuthDocument, AuthCreationAttributes> & AuthModelInstanceMethods = sequelize.define(
@@ -101,7 +102,7 @@ AuthModel.prototype.comparePassword = async function (password: string, hashedPa
 };
 
 AuthModel.prototype.hashPassword = async function (password: string): Promise<string> {
-  return hash(password, SALT_ROUND);
+  return Promise.resolve(hash(password, SALT_ROUND));
 };
 
 AuthModel.sync({});
