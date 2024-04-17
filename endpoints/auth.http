@@ -1,0 +1,28 @@
+@baseUrl = http://localhost:6969
+# @baseUrl = https://api.dev.socialappserver.online
+@urlPath = api/v1
+
+###
+POST {{baseUrl}}/{{urlPath}}/signup
+Content-Type: application/json
+withCredentials: true
+
+{
+  "username": "quandepzai",
+  "password": "quan0401",
+  "email": "dongminhquan2004@gmail.com",
+  "country": "VN",
+  "phone": "0938555505",
+  "profilePicture": "profilePicture"
+}
+
+###
+POST {{baseUrl}}/{{urlPath}}/signin
+Content-Type: application/json
+withCredentials: true
+
+{
+  "email": "dongminhquan2004@gmail.com",
+  "password": "quan0401"
+
+}
