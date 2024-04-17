@@ -3,9 +3,8 @@ import { DataTypes, Optional, ModelDefined, CreateOptions, Model, InferAttribute
 import { compare, hash } from 'bcryptjs';
 import { sequelize } from '~/database';
 
-const User = require('./user'); 
-const SavingPlan = require('./savingPlan'); 
-
+import { AuthModel } from './auth.model';
+//import { SavingPlan } from './savingPlan.model';
 export const UserSaving = sequelize.define('UserSaving', {
     savingID: {
         type: DataTypes.INTEGER,
@@ -46,6 +45,6 @@ export const UserSaving = sequelize.define('UserSaving', {
 
   });
 
-UserSaving.belongsTo(User, { foreignKey: 'userId' }); 
-UserSaving.belongsTo(SavingPlan, { foreignKey: 'savingplanID' }); 
+UserSaving.belongsTo(AuthModel, { foreignKey: 'userId' }); 
+//UserSaving.belongsTo(SavingPlan, { foreignKey: 'savingplanID' }); 
   

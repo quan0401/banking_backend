@@ -14,7 +14,7 @@ class SavingService {
 
       return saving.toJSON();
     } catch (error: any) {
-      // Handle errors and return an error response
+
       return {
         message: error?.errors[0]?.message,
         statusCode: -1,
