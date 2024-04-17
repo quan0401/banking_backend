@@ -3,14 +3,12 @@ import { ISaving } from "~auth/interfaces/userSaving.interface";
 import { IErrorResponse } from '@quan0401/ecommerce-shared';
 import { omit } from 'lodash';
 import { Model, Op } from 'sequelize'; // Import ValidationError from Sequelize
+import { IsUnion } from "joi";
 
 class SavingService {
   async openSaving(data: ISaving): Promise<ISaving | IErrorResponse> {
     try {
-      const saving = await UserSaving.create({
-        ...data,
-        createdAt: new Date(),
-      });
+      const saving = await UserSaving.create(data);
 
       return saving.toJSON();
     } catch (error: any) {

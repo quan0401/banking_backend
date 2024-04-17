@@ -1,8 +1,10 @@
 import { Request, Router } from 'express';
 import { Signin } from '~auth/controllers/signin';
 import { Signup } from '~auth/controllers/signup';
+import { Saving } from '~auth/controllers/saving';
 import { AuthModel } from '~auth/models/auth.model';
 import { SavingPlan } from '~auth/models/savingPlan.model';
+import { UserSaving } from '~auth/models/userSaving.model';
 
 class AuthRoutes {
   private router: Router;
@@ -19,9 +21,9 @@ class AuthRoutes {
       res.status(200).json({ message: 'All users', users: result });
     });
 
-    this.router.post('/saving', async (req, res) => {
+    this.router.post('/savingplan', async (req, res) => {
       const result = await SavingPlan.create({
-        schedule: Date.now(),
+        schedule: 6,
         interestRate: 20,
         minimumMoney: 30
       });
@@ -30,6 +32,9 @@ class AuthRoutes {
         message: 'test saving plan'
       });
     });
+
+    this.router.post('/saving', Saving.prototype.createSaving);
+
     return this.router;
   }
 }

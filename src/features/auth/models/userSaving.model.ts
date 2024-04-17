@@ -1,10 +1,11 @@
 import { DataTypes, Optional, ModelDefined, CreateOptions, Model, InferAttributes, InferCreationAttributes } from 'sequelize';
 import { compare, hash } from 'bcryptjs';
 import { sequelize } from '~/database';
+import { ISaving } from '~auth/interfaces/userSaving.interface';
 
-import { AuthModel } from './auth.model';
-//import { SavingPlan } from './savingPlan.model';
-export const UserSaving = sequelize.define('UserSaving', {
+// import { AuthModel } from './auth.model';
+// import { SavingPlan } from './savingPlan.model';
+export const UserSaving: ModelDefined<ISaving, ISaving> = sequelize.define('UserSaving', {
   savingID: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -14,22 +15,22 @@ export const UserSaving = sequelize.define('UserSaving', {
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    references: {
-      model: 'User',
-      key: 'id'
-    }
+    // references: {
+    //   model: 'User',
+    //   key: 'id'
+    // }
   },
   balance: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  savingplanID: {
+  savingPlanId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    references: {
-      model: 'SavingPlan',
-      key: 'id'
-    }
+    // references: {
+    //   model: 'SavingPlan',
+    //   key: 'id'
+    // }
   },
   status: {
     type: DataTypes.BOOLEAN,
@@ -43,5 +44,6 @@ export const UserSaving = sequelize.define('UserSaving', {
   }
 });
 
-UserSaving.belongsTo(AuthModel, { foreignKey: 'userId' });
-//UserSaving.belongsTo(SavingPlan, { foreignKey: 'savingplanID' });
+// UserSaving.belongsTo(AuthModel, { foreignKey: 'id' });
+// UserSaving.belongsTo(SavingPlan, { foreignKey: 'id' });
+UserSaving.sync({})
