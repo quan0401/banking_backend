@@ -3,8 +3,13 @@ import { compare, hash } from 'bcryptjs';
 import { sequelize } from '~/database';
 
 export const SavingPlan = sequelize.define('SavingPlan', {
-  schedule: {
+  typeID: {
     type: DataTypes.STRING,
+    primaryKey: true,
+    allowNull: false
+  },
+  termDeposit: {
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   interestRate: {
@@ -12,8 +17,9 @@ export const SavingPlan = sequelize.define('SavingPlan', {
     allowNull: false
   },
   minimumMoney: {
-    type: DataTypes.FLOAT,
-    allowNull: false
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 1000000
   }
 });
 

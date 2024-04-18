@@ -5,6 +5,7 @@ import { Saving } from '~auth/controllers/saving';
 import { AuthModel } from '~auth/models/auth.model';
 import { SavingPlan } from '~auth/models/savingPlan.model';
 import { UserSaving } from '~auth/models/userSaving.model';
+import { ISaving } from '~auth/interfaces/userSaving.interface';
 
 class AuthRoutes {
   private router: Router;
@@ -23,9 +24,9 @@ class AuthRoutes {
 
     this.router.post('/savingplan', async (req, res) => {
       const result = await SavingPlan.create({
-        schedule: 6,
-        interestRate: 20,
-        minimumMoney: 30
+        typeID: 'KH6',
+        termDeposit: 6,
+        interestRate: 0.055,
       });
       console.log({ result });
       res.status(200).json({
@@ -33,7 +34,9 @@ class AuthRoutes {
       });
     });
 
-    this.router.post('/saving', Saving.prototype.createSaving);
+    this.router.post('/opensaving', Saving.prototype.createSaving);
+    this.router.put('/withdraw', Saving.prototype.updateBalanceWithdraw);
+    this.router.put('/deposit', Saving.prototype.updateBalanceDeposit);
 
     return this.router;
   }

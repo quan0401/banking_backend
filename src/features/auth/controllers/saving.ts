@@ -31,4 +31,36 @@ export class Saving {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
     }
   }
+  async updateBalanceWithdraw(req: Request, res: Response) {
+    const { savingID, balance } = req.body;
+
+    try {
+      const success = await savingService.updateBalanceWithdraw(savingID, balance);
+
+      if (success) {
+        return res.status(200).json({ message: 'Balance updated successfully' });
+      } else {
+        return res.status(500).json({ error: 'Failed to update balance' });
+      }
+    } catch (error) {
+      console.error('Error updating balance:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+  async updateBalanceDeposit(req: Request, res: Response) {
+    const { savingID, balance } = req.body;
+
+    try {
+      const success = await savingService.updateBalanceDeposit(savingID, balance);
+
+      if (success) {
+        return res.status(200).json({ message: 'Balance updated successfully' });
+      } else {
+        return res.status(500).json({ error: 'Failed to update balance' });
+      }
+    } catch (error) {
+      console.error('Error updating balance:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  }
 }

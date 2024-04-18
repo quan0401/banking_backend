@@ -5,7 +5,10 @@ import { ISaving } from '~auth/interfaces/userSaving.interface';
 
 // import { AuthModel } from './auth.model';
 // import { SavingPlan } from './savingPlan.model';
-export const UserSaving: ModelDefined<ISaving, ISaving> = sequelize.define('UserSaving', {
+
+type SavingCreationAttributes = Optional<ISaving, 'savingID' | 'createdAt'>;
+
+export const UserSaving: ModelDefined<ISaving, SavingCreationAttributes> = sequelize.define('UserSaving', {
   savingID: {
     type: DataTypes.INTEGER,
     allowNull: false,

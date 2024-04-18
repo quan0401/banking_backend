@@ -1,8 +1,11 @@
+import { Model } from 'sequelize';
+
 export interface ISaving {
+    savingID?: number;
     userId?: number;
-    savingPlanId?: number;
+    savingPlanId?: string;
     balance: number;
-    status?: boolean; 
-    createdAt?: Date;
+    status: boolean; 
+    createdAt: Date;
   }
   
