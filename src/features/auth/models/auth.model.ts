@@ -24,6 +24,11 @@ export const AuthModel: ModelDefined<IAuthDocument, AuthCreationAttributes> & Au
       type: DataTypes.STRING,
       allowNull: false
     },
+    balance: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0
+    },
     profilePublicId: {
       type: DataTypes.STRING,
       allowNull: false
