@@ -131,4 +131,8 @@ dist
 .DS_Store
 .npmrc
 
+<<<<<<< HEAD
 docker-volumes/
+=======
+docker-volumes/
+>>>>>>> 26d799a17096758b8a50ec5877e0a96893b9fe90
