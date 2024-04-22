@@ -72,7 +72,7 @@ class SavingService {
       //use userId to find user and update the balance
   
       userSaving.dataValues.balance += balance;
-
+      userData.dataValues.balance -= balance; 
   
       await UserSaving.update({ balance: userSaving.dataValues.balance, status: userSaving.dataValues.status }, {
         where: { savingID }
