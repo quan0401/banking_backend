@@ -1,4 +1,4 @@
-import { IErrorResponse } from '@quan0401/ecommerce-shared';
+import { IErrorResponse, lowerCase } from '@quan0401/ecommerce-shared';
 import { omit } from 'lodash';
 import { Model, Op } from 'sequelize'; // Import ValidationError from Sequelize
 import { IAuthDocument } from '~auth/interfaces/auth.interface';
@@ -37,6 +37,20 @@ class AuthService {
       } as IErrorResponse;
     }
   }
+  public async getAuthUserWithEmail(email: string): Promise<IAuthDocument | undefined> {
+    try {
+      const result: Model<IAuthDocument> = (await AuthModel.findOne({
+        where: {
+          email: lowerCase(email)
+        }
+      })) as Model<IAuthDocument>;
+
+      return result?.dataValues;
+    } catch (error) {
+      // log.error(error);
+      console.log(error);
+    }
+  }
   // public async findUserByEmail(email: string): Promise<IAuthDocument | IErrorResponse> {
   //   try {
   //     const auth = await AuthModel.findOne({
@@ -52,7 +66,5 @@ class AuthService {
   //     } as IErrorResponse;
   //   }
   // }
-
-
 }
 export const authService: AuthService = new AuthService();

@@ -28,7 +28,7 @@ export const AuthModel: ModelDefined<IAuthDocument, AuthCreationAttributes> & Au
     balance: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: 1e8
     },
 
     profilePublicId: {
