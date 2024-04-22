@@ -39,6 +39,7 @@ class SavingService {
       //use userId to find user and update the balance
 
       userSaving.dataValues.balance -= balance;
+      userData.dataValues.balance += balance; 
 
       if (userSaving.dataValues.balance === 0) {
         userSaving.dataValues.status = false;
