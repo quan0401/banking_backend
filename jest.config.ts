@@ -24,7 +24,8 @@ const config: Config = {
   },
   coverageReporters: ['text-summary', 'lcov'],
   moduleNameMapper: {
-    '~/(.*)': ['<rootDir>/src/$1']
+    '~/(.*)': ['<rootDir>/src/$1'],
+    '~auth/(.*)': ['<rootDir>/src/features/auth/$1']
   }
 };
 
