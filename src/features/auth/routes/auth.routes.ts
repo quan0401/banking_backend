@@ -1,5 +1,3 @@
-
-
 import { Request, Router } from 'express';
 import { Signin } from '~auth/controllers/signin';
 import { Signup } from '~auth/controllers/signup';
@@ -8,7 +6,7 @@ import { AuthModel } from '~auth/models/auth.model';
 import { SavingPlan } from '~auth/models/savingPlan.model';
 import { UserSaving } from '~auth/models/userSaving.model';
 import { ISaving } from '~auth/interfaces/userSaving.interface';
-
+import { Seed } from '~auth/controllers/seed';
 
 class AuthRoutes {
   private router: Router;
@@ -19,6 +17,8 @@ class AuthRoutes {
   public routes(): Router {
     this.router.post('/signup', Signup.prototype.signup);
     this.router.post('/signin', Signin.prototype.user);
+    this.router.post('/seeds/user/:count', Seed.prototype.seedsAuth);
+    this.router.post('/seeds/saving', Seed.prototype.seedsSaving);
 
     this.router.get('/test', async (req, res) => {
       const result = await AuthModel.findAll();
@@ -29,7 +29,7 @@ class AuthRoutes {
       const result = await SavingPlan.create({
         typeID: 'KH6',
         termDeposit: 6,
-        interestRate: 0.055,
+        interestRate: 0.055
       });
       console.log({ result });
       res.status(200).json({
