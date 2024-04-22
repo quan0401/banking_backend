@@ -6,15 +6,10 @@ import { ISaving } from '~auth/interfaces/userSaving.interface';
 // import { AuthModel } from './auth.model';
 // import { SavingPlan } from './savingPlan.model';
 
-type SavingCreationAttributes = Optional<ISaving, 'savingID' | 'createdAt'>;
+type SavingCreationAttributes = Optional<ISaving, 'userId' | 'createdAt'>;
 
 export const UserSaving: ModelDefined<ISaving, SavingCreationAttributes> = sequelize.define('UserSaving', {
-  savingID: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    autoIncrement: true,
-    primaryKey: true
-  },
+
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -24,11 +19,11 @@ export const UserSaving: ModelDefined<ISaving, SavingCreationAttributes> = seque
     // }
   },
   balance: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.FLOAT,
     allowNull: false
   },
   savingPlanId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
     // references: {
     //   model: 'SavingPlan',

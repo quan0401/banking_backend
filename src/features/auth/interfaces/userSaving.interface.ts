@@ -5,7 +5,8 @@ export interface ISaving {
     userId?: number;
     savingPlanId?: string;
     balance: number;
-    status: boolean; 
+    status?: boolean; 
     createdAt: Date;
+    updatedAt?: Date;
   }
   

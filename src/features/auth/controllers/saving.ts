@@ -32,10 +32,10 @@ export class Saving {
     }
   }
   async updateBalanceWithdraw(req: Request, res: Response) {
-    const { savingID, balance } = req.body;
+    const { userID, savingID, balance } = req.body;
 
     try {
-      const success = await savingService.updateBalanceWithdraw(savingID, balance);
+      const success = await savingService.updateBalanceWithdraw(userID, savingID, balance);
 
       if (success) {
         return res.status(200).json({ message: 'Balance updated successfully' });
@@ -48,10 +48,10 @@ export class Saving {
     }
   }
   async updateBalanceDeposit(req: Request, res: Response) {
-    const { savingID, balance } = req.body;
+    const { userID, savingID, balance } = req.body;
 
     try {
-      const success = await savingService.updateBalanceDeposit(savingID, balance);
+      const success = await savingService.updateBalanceDeposit(userID, savingID, balance);
 
       if (success) {
         return res.status(200).json({ message: 'Balance updated successfully' });
