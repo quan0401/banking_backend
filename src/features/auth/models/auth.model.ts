@@ -62,7 +62,8 @@ export const AuthModel: ModelDefined<IAuthDocument, AuthCreationAttributes> & Au
     },
     emailVerified: {
       type: DataTypes.BOOLEAN,
-      allowNull: true
+      allowNull: true,
+      defaultValue: false
     },
     createdAt: {
       type: DataTypes.DATE,

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { BadRequestError, firstLetterUppercase, IErrorResponse } from '@quan0401/ecommerce-shared';
+import { BadRequestError, firstLetterUppercase } from '@quan0401/ecommerce-shared';
 import { authService } from '~services/db/auth.service';
 import { generateFromEmail } from 'unique-username-generator';
 import { Request, Response } from 'express';
