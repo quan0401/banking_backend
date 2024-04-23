@@ -30,7 +30,6 @@ export const AuthModel: ModelDefined<IAuthDocument, AuthCreationAttributes> & Au
       allowNull: false,
       defaultValue: 1e8
     },
-
     profilePublicId: {
       type: DataTypes.STRING,
       allowNull: false
@@ -45,7 +44,11 @@ export const AuthModel: ModelDefined<IAuthDocument, AuthCreationAttributes> & Au
       allowNull: false,
       unique: true
     },
-    country: {
+    cccd: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    homeAddress: {
       type: DataTypes.STRING,
       allowNull: true
     },

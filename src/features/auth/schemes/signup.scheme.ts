@@ -13,7 +13,11 @@ const signupScheme: ObjectSchema = Joi.object().keys({
     'string.max': 'Invalid password',
     'string.empty': 'Password is a required field'
   }),
-  country: Joi.string().required().messages({
+  homeAddress: Joi.string().required().messages({
+    'string.base': 'Country must be of type string',
+    'string.empty': 'Country is a required field'
+  }),
+  cccd: Joi.string().required().messages({
     'string.base': 'Country must be of type string',
     'string.empty': 'Country is a required field'
   }),

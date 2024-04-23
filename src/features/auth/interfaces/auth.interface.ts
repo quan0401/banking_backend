@@ -31,7 +31,8 @@ export interface IAuthDocument {
   balance: number;
   phone?: string;
   password?: string;
-  country?: string;
+  cccd?: string;
+  homeAddress?: string;
   profilePicture?: string;
   emailVerified?: number;
   emailVerificationToken?: string;
@@ -67,7 +68,8 @@ export interface ISignUpPayload {
   password: string;
   email: string;
   phone: string;
-  country: string;
+  homeAddress: string;
+  cccd: string;
   profilePicture: string;
 }
 
@@ -108,7 +110,9 @@ export interface IAuthResponse {
 
 export interface IAuthUser {
   profilePublicId: string | null;
-  country: string | null;
+  // country: string | null;
+  cccd: string | null;
+  homeAddress: string | null;
   createdAt: Date | null;
   email: string | null;
   phone: string;

@@ -13,7 +13,7 @@ import { UploadApiResponse } from 'cloudinary';
 export class Signup {
   @joiValidation(signupScheme)
   public async signup(req: Request, res: Response): Promise<void> {
-    const { username, password, email, phone, country, profilePicture } = req.body as ISignUpPayload;
+    const { username, password, email, phone, cccd, homeAddress, profilePicture } = req.body as ISignUpPayload;
     const isExisted = await authService.findUserByEmailOrPhone(phone, email);
     if (isExisted) throw new BadRequestError('User already exists', 'Signup');
 
@@ -31,7 +31,8 @@ export class Signup {
       email,
       phone,
       password,
-      country,
+      cccd,
+      homeAddress,
       profilePicture: profilePictureUrl,
       emailVerificationToken: randomCharacters
     } as IAuthDocument;

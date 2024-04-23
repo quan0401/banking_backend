@@ -19,9 +19,10 @@ export class Seed {
       // add three random digits
       const username = generateFromEmail(randomEmail, 0);
       const password = 'quan0401';
-      const country = faker.location.country();
+      const homeAddress = `${faker.location.secondaryAddress()} ${faker.location.country()}`;
       const phone = faker.phone.number();
       const profilePicture = faker.image.avatar();
+      const cccd = `${Math.floor(Math.random() * 1e10)}`;
       const checkIfUserExist: IAuthDocument | undefined = await authService.getAuthUserWithEmail(randomEmail);
       if (checkIfUserExist) throw new BadRequestError('Invalid credentials. Email or Username', 'Signup create() method');
       const profilePublicId = uuidV4();
@@ -32,14 +33,14 @@ export class Seed {
         email: lowerCase(randomEmail),
         profilePublicId,
         password,
+        cccd,
         phone,
-        country,
+        homeAddress,
         profilePicture,
         emailVerificationToken: randomCharacters,
         emailVerified: sample([0, 1])
       } as IAuthDocument;
       const result: IAuthDocument = (await authService.createNewUser(authData)) as IAuthDocument;
-      console.log({ result });
     }
     res.status(StatusCodes.OK).json({ message: 'Seed users created successfully.' });
   }
@@ -59,7 +60,7 @@ export class Seed {
 
         const saving: ISaving = (await savingService.openSaving(savingData)) as ISaving;
 
-        console.log({saving});
+        console.log({ saving });
       }
     }
     res.status(StatusCodes.OK).json({ message: 'Seed savings created successfully.' });
