@@ -42,5 +42,14 @@ class AuthService {
     }
     return user?.dataValues;
   }
+
+  public async isAdmin(authId: Required<IAuthDocument>['id']): Promise<boolean> {
+    const user: Model | null = await AuthModel.scope('withAdmin').findOne({
+      where: {
+        id: authId
+      }
+    });
+    return user?.dataValues.isAdmin === 1;
+  }
 }
 export const authService: AuthService = new AuthService();

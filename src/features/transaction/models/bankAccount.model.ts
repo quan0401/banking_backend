@@ -61,7 +61,8 @@ export const BankAccountModel: ModelDefined<IBankAccountDocument, IBankAccountCr
     // Account status (active, closed, etc.)
     status: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      defaultValue: 'active'
     }
     // Additional fields...
   },

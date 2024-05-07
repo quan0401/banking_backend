@@ -4,12 +4,12 @@ export interface IBankAccountDocument {
   accountHolder?: string;
   bankName?: string;
   accountNumber?: string;
-  ownerAddress?: string | null;
-  ownerContact?: string | null;
-  accountType?: string | null;
+  ownerAddress?: string;
+  ownerContact?: string;
+  accountType?: string;
   currency?: string;
-  branch?: string | null;
-  status?: string | null;
+  branch?: string;
+  status?: 'active' | 'inactive';
   createdAt?: Date;
   updatedAt?: Date;
 }

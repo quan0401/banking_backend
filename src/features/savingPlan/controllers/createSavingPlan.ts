@@ -13,10 +13,8 @@ export class CreateSavingPlan {
   public async create(req: Request, res: Response): Promise<void> {
     const { termPeriod, minimumBalance, minimumEachTransaction, image, interestRate, description, isActive, startDate, endDate, currency } =
       req.body;
-
     const uploadResult: UploadApiResponse = (await uploads(image, config.CLOUD_FOLDER!)) as UploadApiResponse;
     if (!uploadResult.public_id) throw new BadRequestError('File upload error', 'SignUp create() method error');
-
     const savingPlanDocument: ISavingPlanDocument = {
       termPeriod,
       minimumBalance: parseInt(minimumBalance, 10),
@@ -30,7 +28,6 @@ export class CreateSavingPlan {
       image: uploadResult.secure_url
     };
     const savingPlan: ISavingPlanDocument = await savingPlanService.create(savingPlanDocument);
-
     res.status(StatusCodes.CREATED).json({ message: 'Created Saving Plan successfully', savingPlan });
   }
 }

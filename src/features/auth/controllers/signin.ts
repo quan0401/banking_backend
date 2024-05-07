@@ -23,7 +23,7 @@ export class Signin {
       return;
     }
     const payload: IAuthPayload = {
-      _id: user!.id as string,
+      id: user!.id as string,
       username: user!.username as string,
       email: user!.email as string,
       phone: user!.phone as string
