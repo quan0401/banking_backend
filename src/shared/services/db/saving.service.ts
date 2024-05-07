@@ -13,7 +13,18 @@ class SavingService {
   async openSaving(data: ISaving): Promise<ISaving | IErrorResponse> {
     try {
       const saving = await UserSaving.create(data);
-
+      const userData = await AuthModel.findByPk(data.userId);
+      if (!userData) {
+        throw new Error('Saving record not found');
+      }
+      
+      userData.dataValues.balance -= saving.dataValues.balance;
+      await AuthModel.update(
+        { balance: userData.dataValues.balance },
+        {
+          where: { id: data.userId }
+        }
+      );
       return saving.toJSON();
     } catch (error: any) {
       return {
@@ -24,10 +35,28 @@ class SavingService {
       } as IErrorResponse;
     }
   }
-  async updateBalanceWithdraw(userID: number, savingID: number, balance: number): Promise<boolean> {
+
+  async findSavingsByUserId(userId: number): Promise<ISaving[] | IErrorResponse> {
     try {
-      const userSaving = await UserSaving.findByPk(savingID);
-      const userData = await AuthModel.findByPk(userID);
+      const savings = await UserSaving.findAll({
+        where: { userId: userId },
+      });
+
+      return savings.map((s) => s.toJSON() as ISaving);
+    } catch (error: any) {
+      return {
+        message: error?.message || 'Error fetching savings',
+        statusCode: -1,
+        status: 'error',
+        comingFrom: 'SavingService findSavingsByUserId',
+      } as IErrorResponse;
+    }
+  }
+
+  async updateBalanceWithdraw(userId: number, savingId: number, balance: number): Promise<boolean> {
+    try {
+      const userSaving = await UserSaving.findByPk(savingId);
+      const userData = await AuthModel.findByPk(userId);
 
       if (!userSaving) {
         throw new Error('Saving record not found');
@@ -48,13 +77,13 @@ class SavingService {
       await UserSaving.update(
         { balance: userSaving.dataValues.balance, status: userSaving.dataValues.status },
         {
-          where: { savingID }
+          where: { id: savingId }
         }
       );
       await AuthModel.update(
         { balance: userData.dataValues.balance },
         {
-          where: { userID }
+          where: { id: userId }
         }
       );
 
@@ -64,10 +93,10 @@ class SavingService {
       return false;
     }
   }
-  async updateBalanceDeposit(userID: number, savingID: number, balance: number): Promise<boolean> {
+  async updateBalanceDeposit(userId: number, savingId: number, balance: number): Promise<boolean> {
     try {
-      const userSaving = await UserSaving.findByPk(savingID);
-      const userData: Model<IAuthDocument> = (await AuthModel.findByPk(userID)) as Model<IAuthDocument>;
+      const userSaving = await UserSaving.findByPk(savingId);
+      const userData: Model<IAuthDocument> = (await AuthModel.findByPk(userId)) as Model<IAuthDocument>;
       if (!userSaving) {
         throw new Error('Saving record not found');
       }
@@ -81,10 +110,10 @@ class SavingService {
       userData.dataValues.balance -= balance; 
   
       await UserSaving.update({ balance: userSaving.dataValues.balance, status: userSaving.dataValues.status }, {
-        where: { savingID }
+        where: { id: savingId }
       });
       await AuthModel.update({ balance: userData.dataValues.balance }, {
-        where: { userID }
+        where: { id: userId }
       });
   
       return true;

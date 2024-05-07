@@ -1,7 +1,7 @@
 import { Model } from 'sequelize';
 
 export interface ISaving {
-  savingID?: number;
+  id?: number;
   userId?: number;
   savingPlanId?: string;
   balance: number;

@@ -38,6 +38,7 @@ class AuthRoutes {
     });
 
     this.router.post('/opensaving', Saving.prototype.createSaving);
+    this.router.post('/getsavings', Saving.prototype.userSavings);
     this.router.put('/withdraw', Saving.prototype.updateBalanceWithdraw);
     this.router.put('/deposit', Saving.prototype.updateBalanceDeposit);
 

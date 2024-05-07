@@ -31,11 +31,30 @@ export class Saving {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
     }
   }
+
+  async userSavings(req: Request, res: Response): Promise<void> {
+    const { userId } = req.body;
+  
+    const result = await savingService.findSavingsByUserId(userId);
+  
+    if ('message' in result) {
+
+      res.status(StatusCodes.BAD_REQUEST).json({ error: result.message });
+    } else {
+      if (result.length === 0) {
+        res.status(StatusCodes.OK).json({ message: "Don't have any saving" });
+      } else {
+        res.status(StatusCodes.OK).json({ savings: result }); // Send the savings data
+      }
+    }
+  }
+
+
   async updateBalanceWithdraw(req: Request, res: Response) {
-    const { userID, savingID, balance } = req.body;
+    const { userId, savingId, balance } = req.body;
 
     try {
-      const success = await savingService.updateBalanceWithdraw(userID, savingID, balance);
+      const success = await savingService.updateBalanceWithdraw(userId, savingId, balance);
 
       if (success) {
         return res.status(200).json({ message: 'Balance updated successfully' });
@@ -48,10 +67,10 @@ export class Saving {
     }
   }
   async updateBalanceDeposit(req: Request, res: Response) {
-    const { userID, savingID, balance } = req.body;
+    const { userId, savingId, balance } = req.body;
 
     try {
-      const success = await savingService.updateBalanceDeposit(userID, savingID, balance);
+      const success = await savingService.updateBalanceDeposit(userId, savingId, balance);
 
       if (success) {
         return res.status(200).json({ message: 'Balance updated successfully' });

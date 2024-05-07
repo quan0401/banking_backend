@@ -60,7 +60,7 @@ export class Seed {
 
         const saving: ISaving = (await savingService.openSaving(savingData)) as ISaving;
 
-        console.log({ saving });
+        // console.log({ saving });
       }
     }
     res.status(StatusCodes.OK).json({ message: 'Seed savings created successfully.' });
