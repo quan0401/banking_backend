@@ -1,11 +1,12 @@
 export interface IUserSavingDocument {
-  id: number;
-  userId: number;
-  savingPlanId: number;
-  totalAmount: number;
-  lastUpdated: Date;
-  currency?: string | null;
-  targetAmount?: number | null;
+  id?: string;
+  userId?: string;
+  savingPlanId?: string;
+  totalAmount?: number;
+  lastUpdated?: Date;
+  currency?: string;
+  targetAmount?: number;
   createdAt?: Date;
   updatedAt?: Date;
+  version?: number;
 }

@@ -11,13 +11,25 @@ import { savingPlanService } from '~services/db/savingPlan.service';
 export class CreateSavingPlan {
   @joiValidation(savingPlanScheme)
   public async create(req: Request, res: Response): Promise<void> {
-    const { termPeriod, minimumBalance, minimumEachTransaction, image, interestRate, description, isActive, startDate, endDate, currency } =
-      req.body;
+    const {
+      termPeriod,
+      minimumBalance,
+      maximumBalance,
+      minimumEachTransaction,
+      image,
+      interestRate,
+      description,
+      isActive,
+      startDate,
+      endDate,
+      currency
+    } = req.body;
     const uploadResult: UploadApiResponse = (await uploads(image, config.CLOUD_FOLDER!)) as UploadApiResponse;
     if (!uploadResult.public_id) throw new BadRequestError('File upload error', 'SignUp create() method error');
     const savingPlanDocument: ISavingPlanDocument = {
       termPeriod,
       minimumBalance: parseInt(minimumBalance, 10),
+      maximumBalance: parseInt(maximumBalance, 10),
       minimumEachTransaction: parseInt(minimumEachTransaction, 10),
       interestRate: parseFloat(interestRate),
       description,

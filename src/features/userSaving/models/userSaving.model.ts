@@ -27,7 +27,13 @@ export const UserSavingModel: ModelDefined<IUserSavingDocument, IUserSavingCreat
     totalAmount: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: 0,
+      validate: {
+        min: {
+          args: [0],
+          msg: 'Total amount must be greater than 0'
+        }
+      }
     },
     lastUpdated: {
       type: DataTypes.DATE,
@@ -36,7 +42,8 @@ export const UserSavingModel: ModelDefined<IUserSavingDocument, IUserSavingCreat
     },
     currency: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: false,
+      defaultValue: 'VND'
     },
     targetAmount: {
       type: DataTypes.FLOAT,
@@ -44,7 +51,8 @@ export const UserSavingModel: ModelDefined<IUserSavingDocument, IUserSavingCreat
     }
   },
   {
-    timestamps: false
+    timestamps: false,
+    version: true
   }
 );
 

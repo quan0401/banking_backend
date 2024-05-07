@@ -1,0 +1,41 @@
+@baseUrl = http://localhost:6969
+# @baseUrl = https://api.dev.socialappserver.online
+@urlPath = api/v1
+
+
+###
+POST {{baseUrl}}/{{urlPath}}/transaction/pay/e5eedee5-2278-469e-8d43-10f4cc70ed53
+Content-Type: application/json
+withCredentials: true
+
+{
+  "bankAccountId": "7f669f1a-2a4f-4607-9868-77265d912ea3",
+  "amount": 100,
+  "transactionType": 1
+}
+
+
+###
+POST {{baseUrl}}/{{urlPath}}/transaction/withdraw/e5eedee5-2278-469e-8d43-10f4cc70ed53
+Content-Type: application/json
+withCredentials: true
+
+{
+  "bankAccountId": "7f669f1a-2a4f-4607-9868-77265d912ea3",
+  "amount": 100,
+  "transactionType": -1
+}
+
+###
+GET {{baseUrl}}/{{urlPath}}/transaction/all
+Content-Type: application/json
+withCredentials: true
+
+{}
+
+###
+GET {{baseUrl}}/{{urlPath}}/transaction/savingPlan/e5eedee5-2278-469e-8d43-10f4cc70ed53
+Content-Type: application/json
+withCredentials: true
+
+{}

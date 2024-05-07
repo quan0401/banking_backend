@@ -2,6 +2,7 @@ export interface ISavingPlanDocument {
   id?: string; // Assuming you have an auto-incrementing primary key
   termPeriod?: number;
   minimumBalance?: number;
+  maximumBalance?: number;
   minimumEachTransaction?: number;
   interestRate?: number;
   description?: string;

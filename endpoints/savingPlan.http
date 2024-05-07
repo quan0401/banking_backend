@@ -11,6 +11,7 @@ withCredentials: true
 {
   "termPeriod": 12,
   "minimumBalance": 1000,
+  "maximumBalance": 1000000000,
   "minimumEachTransaction": 50,
   "interestRate": 6.3,
   "description": "Flexible Savings Plan",
@@ -29,7 +30,7 @@ withCredentials: true
 {}
 
 ###
-GET {{baseUrl}}/{{urlPath}}/savingPlan/bf0de921-f479-4b8a-ba0f-42f37754a712
+GET {{baseUrl}}/{{urlPath}}/savingPlan/1865e127-f93e-4866-90eb-58d5a95a0946
 Content-Type: application/json
 withCredentials: true
 
@@ -44,6 +45,7 @@ withCredentials: true
 {
   "termPeriod": 5,
   "minimumBalance": 1200,
+  "maximumBalance": 1000000000,
   "minimumEachTransaction": 50,
   "interestRate": 6.3,
   "description": "Flexible Savings Plan",
@@ -55,7 +57,7 @@ withCredentials: true
 
 
 ###
-DELETE {{baseUrl}}/{{urlPath}}/savingPlan/bf0de921-f479-4b8a-ba0f-42f37754a712
+DELETE {{baseUrl}}/{{urlPath}}/savingPlan/1865e127-f93e-4866-90eb-58d5a95a0946
 Content-Type: application/json
 withCredentials: true
 

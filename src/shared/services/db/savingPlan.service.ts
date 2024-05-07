@@ -1,7 +1,6 @@
-import { IAuthDocument } from '@quan0401/ecommerce-shared';
 import { Model } from 'sequelize';
 import { ISavingPlanDocument } from '~savingPlan/interfaces/savingPlan.interface';
-import { SavingPlanCreationAttributes, SavingPlanModel } from '~savingPlan/models/savingPlan.model';
+import { SavingPlanModel } from '~savingPlan/models/savingPlan.model';
 
 class SavingPlanService {
   public async create(plan: ISavingPlanDocument): Promise<ISavingPlanDocument> {

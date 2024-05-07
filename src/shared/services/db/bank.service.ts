@@ -1,6 +1,5 @@
-import { Model, Op } from 'sequelize'; // Import ValidationError from Sequelize
+import { Model } from 'sequelize'; // Import ValidationError from Sequelize
 import { IAuthDocument } from '~auth/interfaces/auth.interface';
-import { AuthModel } from '~auth/models/auth.model';
 import { IBankAccountDocument } from '~transaction/interfaces/bankAccount.interface';
 import { BankAccountModel } from '~transaction/models/bankAccount.model';
 

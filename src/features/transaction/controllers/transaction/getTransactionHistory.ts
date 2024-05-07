@@ -11,25 +11,28 @@ import { transactionService } from '~services/db/transaction.service';
 import { ITransactionDocument, ITransactionResult } from '~transaction/interfaces/transaction.interface';
 import { transactionScheme } from '~transaction/schemes/transaction.scheme';
 
-export class Pay {
-  // pay
-  // scheduledPay
-  @joiValidation(transactionScheme)
-  public async pay(req: Request, res: Response): Promise<void> {
-    const { savingPlanId } = req.params;
-    const { bankAccountId, amount, transactionType } = req.body;
-    const transactionDoc: ITransactionDocument = {
-      userId: req.currentUser!.id,
-      bankAccountId,
-      amount,
-      savingPlanId,
-      transactionDate: new Date(),
-      transactionType
-    };
-    const result: ITransactionResult = await transactionService.makePayment(transactionDoc as Required<ITransactionDocument>);
+export class GetTransactionHistory {
+  // TODO:
+  // historyPaginate
+  // historyByDate
+  // withdrawHistoryOnly
+  public async all(req: Request, res: Response): Promise<void> {
+    const transactions: ITransactionDocument[] = await transactionService.getAllTransactionsOfUser(req.currentUser!.id);
     res.status(StatusCodes.CREATED).json({
-      message: 'Make trancsaction successfully',
-      result
+      message: 'Get all trancsactions successfully',
+      transactions
+    });
+  }
+
+  public async transactionsByPlanId(req: Request, res: Response): Promise<void> {
+    const { savingPlanId } = req.params;
+    const transactions: ITransactionDocument[] = await transactionService.getTransactionsOfUserBySavingPlan(
+      req.currentUser!.id,
+      savingPlanId
+    );
+    res.status(StatusCodes.CREATED).json({
+      message: 'Get all trancsactions by PlanId successfully',
+      transactions
     });
   }
 }

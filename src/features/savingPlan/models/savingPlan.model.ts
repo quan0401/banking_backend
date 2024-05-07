@@ -19,15 +19,19 @@ export const SavingPlanModel: ModelDefined<ISavingPlanDocument, SavingPlanCreati
       allowNull: false
     },
     minimumBalance: {
-      type: DataTypes.FLOAT, // Changed data type to FLOAT
+      type: DataTypes.FLOAT,
+      allowNull: false
+    },
+    maximumBalance: {
+      type: DataTypes.FLOAT,
       allowNull: false
     },
     minimumEachTransaction: {
-      type: DataTypes.FLOAT, // Changed data type to FLOAT
+      type: DataTypes.FLOAT,
       allowNull: false
     },
     interestRate: {
-      type: DataTypes.FLOAT, // Changed data type to FLOAT
+      type: DataTypes.FLOAT,
       allowNull: false
     },
     description: {

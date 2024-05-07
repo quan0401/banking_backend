@@ -2,54 +2,93 @@ import { omit } from 'lodash';
 import { Model, Op } from 'sequelize'; // Import ValidationError from Sequelize
 import { IAuthDocument } from '~auth/interfaces/auth.interface';
 import { AuthModel } from '~auth/models/auth.model';
+import { ITransactionDocument, ITransactionResult } from '~transaction/interfaces/transaction.interface';
+import { TransactionModel } from '~transaction/models/transaction.model';
+import { userSavingService } from '~services/db/userSaving.service';
+import { ISavingPlanDocument } from '~savingPlan/interfaces/savingPlan.interface';
+import { SavingPlanModel } from '~savingPlan/models/savingPlan.model';
+import { IUserSavingDocument } from '~userSaving/interfaces/userSaving.interface';
+import { BankAccountModel } from '~transaction/models/bankAccount.model';
+import { BadRequestError } from '@quan0401/ecommerce-shared';
 
-class AuthService {
-  public async createNewUser(data: IAuthDocument): Promise<IAuthDocument> {
-    const createdUser: Model<IAuthDocument> = (await AuthModel.create(data)) as Model<IAuthDocument>; // No need to cast to Model<IAuthDocument>
+class TransactionService {
+  // makePayment
+  // withdraw
+  // scheduleTransaction
+  // cacnelScheduledTransaction
 
-    const result: IAuthDocument = omit(createdUser.toJSON(), ['password']); // Use toJSON() to convert Sequelize model instance to plain JSON object
-    return result;
-  }
-
-  public async findUserByEmailOrPhone(phone: string, email: string): Promise<IAuthDocument | undefined> {
-    // const user: Model | null = await AuthModel.scope('withAdmin').findOne({
-    const user: Model | null = await AuthModel.findOne({
-      where: {
-        [Op.or]: [{ email: email ? email : '' }, { phone: phone ? phone : '' }]
-      }
-    });
-    return user?.dataValues;
-  }
-
-  public async findUserByEmailToken(token: string): Promise<IAuthDocument | undefined> {
-    const user: Model | null = await AuthModel.findOne({
-      where: {
-        emailVerificationToken: token
-      }
-    });
-    return user?.dataValues;
-  }
-
-  public async updateVerifyEmail(authId: Required<IAuthDocument>['id'], isVerified: 0 | 1): Promise<IAuthDocument | undefined> {
-    const user: Model | null = await AuthModel.findOne({
-      where: {
-        id: authId
-      }
-    });
-    if (user) {
-      await user.update({ emailVerified: isVerified });
-      await user.save();
+  public async makePayment(transactionDoc: Required<ITransactionDocument>): Promise<ITransactionResult> {
+    if (transactionDoc.transactionType !== 1) {
+      throw new BadRequestError('TransactionType must be 1', 'TransactionService makePayment');
     }
-    return user?.dataValues;
+    const bankAccount: Model | null = await BankAccountModel.findByPk(transactionDoc.bankAccountId);
+    if (bankAccount === null) {
+      throw new BadRequestError('Bank Account not exists', 'TransactionService makePayment');
+    }
+    const updatedUserSaving: IUserSavingDocument = await userSavingService.topUpMoney(
+      transactionDoc.userId,
+      transactionDoc.savingPlanId,
+      transactionDoc.amount
+    );
+    // TODO: make hanlder for isSuccessful
+    const createdTransaction: Model = await TransactionModel.create({
+      ...transactionDoc,
+      isSuccessful: 1
+    });
+    return {
+      transaction: createdTransaction.dataValues,
+      userSaving: updatedUserSaving
+    };
   }
 
-  public async isAdmin(authId: Required<IAuthDocument>['id']): Promise<boolean> {
-    const user: Model | null = await AuthModel.scope('withAdmin').findOne({
-      where: {
-        id: authId
-      }
+  public async withdraw(transactionDoc: Required<ITransactionDocument>): Promise<ITransactionResult> {
+    if (transactionDoc.transactionType !== -1) {
+      throw new BadRequestError('TransactionType must be -1 for withdrawal', 'TransactionService makePayment');
+    }
+    const bankAccount: Model | null = await BankAccountModel.findByPk(transactionDoc.bankAccountId);
+    if (bankAccount === null) {
+      throw new BadRequestError('Bank Account not exists', 'TransactionService makePayment');
+    }
+    const updatedUserSaving: IUserSavingDocument = await userSavingService.withdrawMoney(
+      transactionDoc.userId,
+      transactionDoc.savingPlanId,
+      transactionDoc.amount
+    );
+    // TODO: make hanlder for isSuccessful
+    const createdTransaction: Model = await TransactionModel.create({
+      ...transactionDoc,
+      isSuccessful: 1
     });
-    return user?.dataValues.isAdmin === 1;
+    return {
+      transaction: createdTransaction.dataValues,
+      userSaving: updatedUserSaving
+    };
   }
+  public async getAllTransactionsOfUser(userId: string): Promise<ITransactionDocument[]> {
+    const transactions: ITransactionDocument[] = (
+      await TransactionModel.findAll({
+        where: {
+          userId
+        },
+        order: [['transactionDate', 'DESC']]
+      })
+    ).map((tran) => tran.dataValues);
+    return transactions;
+  }
+  public async getTransactionsOfUserBySavingPlan(userId: string, savingPlanId: string): Promise<ITransactionDocument[]> {
+    const transactions: ITransactionDocument[] = (
+      await TransactionModel.findAll({
+        where: {
+          userId,
+          savingPlanId
+        },
+        order: [['transactionDate', 'DESC']]
+      })
+    ).map((tran) => tran.dataValues);
+    return transactions;
+  }
+
+  // public async scheduleTransaction(data: ITransactionDocument): Promise<ITransactionDocument> {}
+  // public async cacnelScheduledTransaction(data: ITransactionDocument): Promise<ITransactionDocument> {}
 }
-export const authService: AuthService = new AuthService();
+export const transactionService: TransactionService = new TransactionService();

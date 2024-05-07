@@ -18,8 +18,8 @@ export const TransactionModel: ModelDefined<ITransactionDocument, TransactionCre
       type: DataTypes.UUID,
       allowNull: false
     },
-    transactorName: {
-      type: DataTypes.STRING,
+    bankAccountId: {
+      type: DataTypes.UUID,
       allowNull: false
     },
     savingPlanId: {
@@ -37,6 +37,10 @@ export const TransactionModel: ModelDefined<ITransactionDocument, TransactionCre
     transactionDate: {
       type: DataTypes.DATE,
       allowNull: false
+    },
+    scheduledDate: {
+      type: DataTypes.DATE,
+      allowNull: true
     },
     transactionType: {
       type: DataTypes.TINYINT,

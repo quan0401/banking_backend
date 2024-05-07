@@ -11,6 +11,11 @@ const savingPlanScheme: ObjectSchema = Joi.object({
     'number.positive': 'Minimum balance must be a positive number',
     'any.required': 'Minimum balance is a required field'
   }),
+  maximumBalance: Joi.number().positive().required().messages({
+    'number.base': 'Maximum balance must be a number',
+    'number.positive': 'Maximum balance must be a positive number',
+    'any.required': 'Maximum balance is a required field'
+  }),
   minimumEachTransaction: Joi.number().positive().required().messages({
     'number.base': 'Minimum each transaction must be a number',
     'number.positive': 'Minimum each transaction must be a positive number',
@@ -57,6 +62,11 @@ const updateSavingPlanScheme: ObjectSchema = Joi.object({
     'number.base': 'Minimum balance must be a number',
     'number.positive': 'Minimum balance must be a positive number',
     'any.required': 'Minimum balance is a required field'
+  }),
+  maximumBalance: Joi.number().positive().required().messages({
+    'number.base': 'Maximum balance must be a number',
+    'number.positive': 'Maximum balance must be a positive number',
+    'any.required': 'Maximum balance is a required field'
   }),
   minimumEachTransaction: Joi.number().positive().required().messages({
     'number.base': 'Minimum each transaction must be a number',
