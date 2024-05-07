@@ -46,7 +46,7 @@ export class AppServer {
         name: 'session',
         keys: [config.SECRET_KEY_ONE!, config.SECRET_KEY_TWO!],
         maxAge: 3600 * 1000,
-        secure: config.NODE_ENV !== 'develop'
+        secure: config.NODE_ENV !== 'development'
         // sameSite: 'none'
       })
     );
@@ -70,7 +70,6 @@ export class AppServer {
     });
 
     app.use((err: IErrorResponse, req: Request, res: Response, next: NextFunction) => {
-      console.log(err);
       log.error(err);
 
       if (err instanceof CustomeError) {

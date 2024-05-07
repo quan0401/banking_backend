@@ -13,8 +13,8 @@ import { UploadApiResponse } from 'cloudinary';
 export class Signup {
   @joiValidation(signupScheme)
   public async signup(req: Request, res: Response): Promise<void> {
-    const { username, password, email, phone, country, profilePicture } = req.body as ISignUpPayload;
-    const isExisted = await authService.findUserByEmailOrPhone(phone, email);
+    const { username, password, email, phone, cccd, homeAddress, profilePicture } = req.body as ISignUpPayload;
+    const isExisted = await authService.findUserByEmailOrPhone('', email);
     if (isExisted) throw new BadRequestError('User already exists', 'Signup');
 
     const profilePublicId: string = uuidv4();
@@ -31,16 +31,14 @@ export class Signup {
       email,
       phone,
       password,
-      country,
+      cccd,
+      homeAddress,
       profilePicture: profilePictureUrl,
       emailVerificationToken: randomCharacters
     } as IAuthDocument;
 
     // upload to database
-    const result: IAuthDocument | IErrorResponse = await authService.createNewUser(userData);
-    if ('statusCode' in result && result.statusCode === -1) {
-      throw new BadRequestError(result.message, result.comingFrom);
-    }
+    const result: IAuthDocument = await authService.createNewUser(userData);
 
     res.status(StatusCodes.CREATED).json({ message: 'Create user successfully', user: result });
   }

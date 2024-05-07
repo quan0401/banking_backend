@@ -1,7 +1,8 @@
 import { IAuthDocument } from '~auth/interfaces/auth.interface';
-import { DataTypes, Optional, ModelDefined, CreateOptions, Model, InferAttributes, InferCreationAttributes } from 'sequelize';
+import { DataTypes, Optional, ModelDefined, CreateOptions, Model, FindAttributeOptions } from 'sequelize';
 import { compare, hash } from 'bcryptjs';
 import { sequelize } from '~/database';
+import { v4 as uuidv4 } from 'uuid';
 
 const SALT_ROUND = 10;
 interface AuthModelInstanceMethods extends Model {
@@ -16,6 +17,12 @@ type AuthCreationAttributes = Optional<IAuthDocument, 'id' | 'createdAt' | 'pass
 export const AuthModel: ModelDefined<IAuthDocument, AuthCreationAttributes> & AuthModelInstanceMethods = sequelize.define(
   'auths',
   {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      allowNull: false,
+      defaultValue: () => uuidv4()
+    },
     username: {
       type: DataTypes.STRING,
       allowNull: false
@@ -43,7 +50,15 @@ export const AuthModel: ModelDefined<IAuthDocument, AuthCreationAttributes> & Au
       allowNull: false,
       unique: true
     },
-    country: {
+    cccd: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    isAdmin: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    homeAddress: {
       type: DataTypes.STRING,
       allowNull: true
     },
@@ -57,7 +72,8 @@ export const AuthModel: ModelDefined<IAuthDocument, AuthCreationAttributes> & Au
     },
     emailVerified: {
       type: DataTypes.BOOLEAN,
-      allowNull: true
+      allowNull: false,
+      defaultValue: 0
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -76,6 +92,16 @@ export const AuthModel: ModelDefined<IAuthDocument, AuthCreationAttributes> & Au
   },
   {
     timestamps: true,
+    defaultScope: {
+      attributes: {
+        exclude: ['isAdmin']
+      }
+    },
+    scopes: {
+      withAdmin: {
+        attributes: {} as FindAttributeOptions
+      }
+    },
     indexes: [
       {
         unique: false,
@@ -110,4 +136,6 @@ AuthModel.prototype.hashPassword = async function (password: string): Promise<st
   return Promise.resolve(hash(password, SALT_ROUND));
 };
 
-AuthModel.sync({});
+AuthModel.sync({
+  // force: true
+});

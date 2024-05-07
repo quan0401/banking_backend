@@ -7,7 +7,7 @@ declare global {
 }
 
 export interface IAuthPayload {
-  id: number;
+  _id: string;
   username: string;
   email: string;
   phone: string;
@@ -19,19 +19,20 @@ export interface IAuth {
   password?: string;
   email?: string;
   phone: string;
-  country?: string;
   profilePicture?: string;
 }
 
 export interface IAuthDocument {
-  id?: number;
+  id?: string;
   profilePublicId?: string;
   username?: string;
   email?: string;
   balance?: number;
   phone?: string;
   password?: string;
-  country?: string;
+  isAdmin?: 1 | 0;
+  cccd?: string;
+  homeAddress?: string;
   profilePicture?: string;
   emailVerified?: number;
   emailVerificationToken?: string;
@@ -48,7 +49,6 @@ export interface IAuthBuyerMessageDetails {
   profilePicture?: string;
   email?: string;
   phone: string;
-  country?: string;
   createdAt?: Date;
   type?: string;
 }
@@ -67,7 +67,6 @@ export interface ISignUpPayload {
   password: string;
   email: string;
   phone: string;
-  country: string;
   profilePicture: string;
 }
 
@@ -108,13 +107,12 @@ export interface IAuthResponse {
 
 export interface IAuthUser {
   profilePublicId: string | null;
-  country: string | null;
   createdAt: Date | null;
   email: string | null;
   phone: string;
   emailVerificationToken: string | null;
   emailVerified: boolean | null;
-  id: number | null;
+  id: number | string;
   passwordResetExpires: Date | null;
   passwordResetToken: null | null;
   profilePicture: string | null;

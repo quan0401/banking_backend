@@ -1,0 +1,62 @@
+@baseUrl = http://localhost:6969
+# @baseUrl = https://api.dev.socialappserver.online
+@urlPath = api/v1
+
+
+###
+POST {{baseUrl}}/{{urlPath}}/savingPlan
+Content-Type: application/json
+withCredentials: true
+
+{
+  "termPeriod": 12,
+  "minimumBalance": 1000,
+  "minimumEachTransaction": 50,
+  "interestRate": 6.3,
+  "description": "Flexible Savings Plan",
+  "isActive": 1,
+  "startDate": "2024-05-07T00:00:00.000Z",
+  "endDate": null,
+  "currency": "VND",
+  "image": "image base64 inside images"
+}
+
+###
+GET {{baseUrl}}/{{urlPath}}/savingPlan
+Content-Type: application/json
+withCredentials: true
+
+{}
+
+###
+GET {{baseUrl}}/{{urlPath}}/savingPlan/bf0de921-f479-4b8a-ba0f-42f37754a712
+Content-Type: application/json
+withCredentials: true
+
+{}
+
+
+###
+PUT {{baseUrl}}/{{urlPath}}/savingPlan/bf0de921-f479-4b8a-ba0f-42f37754a712
+Content-Type: application/json
+withCredentials: true
+
+{
+  "termPeriod": 5,
+  "minimumBalance": 1200,
+  "minimumEachTransaction": 50,
+  "interestRate": 6.3,
+  "description": "Flexible Savings Plan",
+  "isActive": 1,
+  "startDate": "2024-05-07T00:00:00.000Z",
+  "endDate": null,
+  "currency": "VND"
+}
+
+
+###
+DELETE {{baseUrl}}/{{urlPath}}/savingPlan/bf0de921-f479-4b8a-ba0f-42f37754a712
+Content-Type: application/json
+withCredentials: true
+
+{}
