@@ -41,20 +41,20 @@ export class AppServer {
     app.use(urlencoded({ extended: true, limit: '200mb' }));
   }
   private securityMiddleware(app: Application): void {
+    console.log(config.NODE_ENV);
     app.use(
       cookieSession({
         name: 'session',
         keys: [config.SECRET_KEY_ONE!, config.SECRET_KEY_TWO!],
         maxAge: 3600 * 1000,
         secure: config.NODE_ENV !== 'development'
-        // sameSite: 'none'
       })
     );
     app.use(hpp());
     app.use(helmet());
     app.use(
       cors({
-        origin: '*',
+        origin: config.CLIENT_URL,
         credentials: true,
         optionsSuccessStatus: 200,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']

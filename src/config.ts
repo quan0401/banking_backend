@@ -11,6 +11,8 @@ class Config {
   public CLOUD_API_KEY: string | undefined;
   public CLOUD_API_SECRET: string | undefined;
   public CLOUD_FOLDER: string | undefined;
+  public CLIENT_URL: string | undefined;
+
   constructor() {
     this.MYSQL_DB = process.env.MYSQL_DB;
     this.JWT_TOKEN = process.env.JWT_TOKEN;
@@ -21,6 +23,7 @@ class Config {
     this.CLOUD_FOLDER = process.env.CLOUD_FOLDER;
     this.CLOUD_API_KEY = process.env.CLOUD_API_KEY;
     this.CLOUD_API_SECRET = process.env.CLOUD_API_SECRET;
+    this.CLIENT_URL = process.env.CLIENT_URL;
   }
 
   public cloudinaryConfig(): void {

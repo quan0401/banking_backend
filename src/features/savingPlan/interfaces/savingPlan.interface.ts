@@ -1,12 +1,16 @@
 export interface ISavingPlanDocument {
-  id?: string; // Assuming you have an auto-incrementing primary key
+  id?: string;
   termPeriod?: number;
   minimumBalance?: number;
   maximumBalance?: number;
   minimumEachTransaction?: number;
+  maximumEachTransaction?: number; // Added this field
   interestRate?: number;
+  interestRateBeforeDueDate?: number; // Added this field
+  title?: string;
   description?: string;
-  isActive?: 1 | 0;
+  basicDescription?: string;
+  isActive?: 1 | 0; // Changed type to boolean for consistency
   startDate?: Date;
   endDate?: Date | null;
   currency?: string;

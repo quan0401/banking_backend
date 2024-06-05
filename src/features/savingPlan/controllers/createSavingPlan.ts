@@ -16,13 +16,17 @@ export class CreateSavingPlan {
       minimumBalance,
       maximumBalance,
       minimumEachTransaction,
-      image,
+      maximumEachTransaction,
       interestRate,
+      interestRateBeforeDueDate,
+      title,
       description,
+      basicDescription,
       isActive,
       startDate,
       endDate,
-      currency
+      currency,
+      image
     } = req.body;
     const uploadResult: UploadApiResponse = (await uploads(image, config.CLOUD_FOLDER!)) as UploadApiResponse;
     if (!uploadResult.public_id) throw new BadRequestError('File upload error', 'SignUp create() method error');
@@ -31,8 +35,12 @@ export class CreateSavingPlan {
       minimumBalance: parseInt(minimumBalance, 10),
       maximumBalance: parseInt(maximumBalance, 10),
       minimumEachTransaction: parseInt(minimumEachTransaction, 10),
+      maximumEachTransaction: parseInt(maximumEachTransaction, 10),
       interestRate: parseFloat(interestRate),
+      interestRateBeforeDueDate: parseFloat(interestRateBeforeDueDate),
+      title,
       description,
+      basicDescription,
       isActive: isActive ? (parseInt(isActive, 10) as ISavingPlanDocument['isActive']) : 1,
       startDate: new Date(startDate),
       endDate: endDate ? new Date(startDate) : null,

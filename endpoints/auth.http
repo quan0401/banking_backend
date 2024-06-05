@@ -28,6 +28,16 @@ withCredentials: true
 }
 
 ###
+POST http://localhost:6969/api/v1/signin
+Content-Type: application/json
+withCredentials: true
+
+{
+  "email": "dongminhquan2004@gmail.com",
+  "password": "quan0401"
+}
+
+###
 POST {{baseUrl}}/{{urlPath}}/verify-email
 Content-Type: application/json
 withCredentials: true

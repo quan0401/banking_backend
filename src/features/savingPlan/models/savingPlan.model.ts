@@ -30,11 +30,27 @@ export const SavingPlanModel: ModelDefined<ISavingPlanDocument, SavingPlanCreati
       type: DataTypes.FLOAT,
       allowNull: false
     },
+    maximumEachTransaction: {
+      type: DataTypes.FLOAT,
+      allowNull: true
+    },
     interestRate: {
       type: DataTypes.FLOAT,
       allowNull: false
     },
+    interestRateBeforeDueDate: {
+      type: DataTypes.FLOAT,
+      allowNull: false
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     description: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    basicDescription: {
       type: DataTypes.STRING,
       allowNull: false
     },
