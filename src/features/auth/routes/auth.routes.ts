@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { GetCurrentUser } from '~auth/controllers/getCurrentUser';
 import { Signin } from '~auth/controllers/signin';
 import { Signup } from '~auth/controllers/signup';
 import { VerifyEmail } from '~auth/controllers/verfiy-email';
@@ -11,6 +12,7 @@ class AuthRoutes {
     this.router = Router();
   }
   public routes(): Router {
+    this.router.get('/auth/currentUser/:authId', GetCurrentUser.prototype.get);
     this.router.post('/signup', Signup.prototype.signup);
     this.router.post('/signin', Signin.prototype.user);
     this.router.post('/verify-email', VerifyEmail.prototype.verify);

@@ -28,6 +28,13 @@ withCredentials: true
 }
 
 ###
+GET {{baseUrl}}/{{urlPath}}/auth/currentUser/80101396-273b-4637-9b17-b39fdf9c1540
+Content-Type: application/json
+withCredentials: true
+
+{}
+
+###
 POST http://localhost:6969/api/v1/signin
 Content-Type: application/json
 withCredentials: true

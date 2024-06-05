@@ -11,6 +11,12 @@ class AuthService {
     return result;
   }
 
+  public async findUserById(id: string): Promise<IAuthDocument | undefined> {
+    // const user: Model | null = await AuthModel.scope('withAdmin').findOne({
+    const user: Model | null = await AuthModel.findByPk(id);
+    return user?.dataValues;
+  }
+
   public async findUserByEmailOrPhone(phone: string, email: string): Promise<IAuthDocument | undefined> {
     // const user: Model | null = await AuthModel.scope('withAdmin').findOne({
     const user: Model | null = await AuthModel.findOne({

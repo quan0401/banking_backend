@@ -21,10 +21,10 @@ export const verifyUser = (req: Request, res: Response, next: NextFunction): voi
 
 export const checkAuthentication = (req: Request, res: Response, next: NextFunction): void => {
   try {
-    if (!req?.currentUser) throw new NotAuthorizedError('Token is not available. Please login...', 'verifyuser');
+    if (!req?.currentUser) throw new NotAuthorizedError('Token is not available. Please login...', 'checkAuthentication');
   } catch (error) {
     log.error('Token is not available', error);
-    throw new NotAuthorizedError('Token is not available', 'verifyuser');
+    throw new NotAuthorizedError('Token is not available', 'checkAuthentication');
   }
   next();
 };
@@ -32,11 +32,11 @@ export const checkAuthentication = (req: Request, res: Response, next: NextFunct
 export const verifyAdmin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   let payload: IAuthPayload;
   try {
-    if (!req.session?.jwt) throw new NotAuthorizedError('Token is not available. Please login...', 'verifyuser');
+    if (!req.session?.jwt) throw new NotAuthorizedError('Token is not available. Please login...', 'verifyAdmin');
     payload = verify(req.session.jwt, config.JWT_TOKEN!) as IAuthPayload;
   } catch (error) {
     log.error('Token is not available', error);
-    throw new NotAuthorizedError('Token is not available', 'verifyuser');
+    throw new NotAuthorizedError('Token is not available', 'verifyAdmin');
   }
 
   const isAdmin: boolean = await authService.isAdmin(payload.id);
