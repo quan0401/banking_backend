@@ -19,11 +19,72 @@ class TransactionService {
 
   public async makePayment(transactionDoc: Required<ITransactionDocument>): Promise<ITransactionResult> {
     if (transactionDoc.transactionType !== 1) {
-      throw new BadRequestError('TransactionType must be 1', 'TransactionService makePayment');
+      throw new BadRequestError('TransactionType must be 1 for make payment and 0 for withdraw', 'TransactionService makePayment');
     }
-    const bankAccount: Model | null = await BankAccountModel.findByPk(transactionDoc.bankAccountId);
-    if (bankAccount === null) {
-      throw new BadRequestError('Bank Account not exists', 'TransactionService makePayment');
+    // const bankAccount: Model | null = await BankAccountModel.findByPk(transactionDoc.bankAccountId);
+    // if (bankAccount === null) {
+    //   throw new BadRequestError('Bank Account not exists', 'TransactionService makePayment');
+    // }
+    // const updatedUserSaving: IUserSavingDocument = await userSavingService.topUpMoney(
+    //   transactionDoc.userId,
+    //   transactionDoc.savingPlanId,
+    //   transactionDoc.amount
+    // );
+    // TODO: make hanlder for isSuccessful
+    const createdTransaction: Model = await TransactionModel.create({
+      ...transactionDoc,
+      isSuccessful: 0
+    });
+    return {
+      transaction: createdTransaction.dataValues
+    };
+  }
+
+  public async markPaymentStatus(
+    userId: string,
+    transactionId: string,
+    savingPlanId: string,
+    status: 1 | 0
+  ): Promise<ITransactionResult | undefined> {
+    if (status === 1) {
+      const transaction: Model<ITransactionDocument> | null = await TransactionModel.findOne({
+        where: {
+          userId,
+          savingPlanId,
+          id: transactionId,
+          isSuccessful: 0
+        }
+      });
+      if (!transaction) return;
+      const updated = await TransactionModel.update(
+        {
+          isSuccessful: status
+        },
+        {
+          where: {
+            userId,
+            savingPlanId,
+            id: transactionId
+          }
+        }
+      );
+
+      if (updated[0] === 0) return;
+      console.log('updated:::::', updated[0]);
+      console.log('transaction:::::', transaction);
+      const userSaving: IUserSavingDocument = await userSavingService.topUpMoney(
+        userId,
+        savingPlanId,
+        transaction.dataValues.amount as number
+      );
+      console.log('userSaving:::::', userSaving);
+      return { transaction: transaction.dataValues, userSaving };
+    }
+  }
+
+  public async makePaymentWithMomo(transactionDoc: Required<ITransactionDocument>): Promise<ITransactionResult> {
+    if (transactionDoc.transactionType !== 1) {
+      throw new BadRequestError('TransactionType must be 1 for make payment and 0 for withdraw', 'TransactionService makePayment');
     }
     const updatedUserSaving: IUserSavingDocument = await userSavingService.topUpMoney(
       transactionDoc.userId,

@@ -20,7 +20,7 @@ export const TransactionModel: ModelDefined<ITransactionDocument, TransactionCre
     },
     bankAccountId: {
       type: DataTypes.UUID,
-      allowNull: false
+      allowNull: true
     },
     savingPlanId: {
       type: DataTypes.UUID,
@@ -58,4 +58,6 @@ export const TransactionModel: ModelDefined<ITransactionDocument, TransactionCre
   }
 );
 
-TransactionModel.sync({});
+TransactionModel.sync({
+  // force: true
+});

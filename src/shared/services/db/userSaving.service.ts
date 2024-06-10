@@ -40,6 +40,7 @@ class UserSavingService {
 
     return updated.dataValues;
   }
+
   public async withdrawMoney(userId: string, savingPlanId: string, amount: number): Promise<IUserSavingDocument> {
     let currentUserSaving: Model | null = await UserSavingModel.findOne({
       where: {
@@ -64,10 +65,12 @@ class UserSavingService {
 
     return updated.dataValues;
   }
+
   private async create(plan: IUserSavingDocument): Promise<Model> {
     const createdPlan: Model = await UserSavingModel.create(plan);
     return createdPlan;
   }
+
   private async isValidAction(
     currentUserSaving: Required<IUserSavingDocument>,
     savingPlan: Required<ISavingPlanDocument>,

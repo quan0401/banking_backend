@@ -22,7 +22,7 @@ const transactionScheme = Joi.object({
   //   'string.required': 'User ID is required',
   //   'string.uuid': 'User ID must be a valid UUID'
   // }),
-  bankAccountId: Joi.string().uuid().required().messages({
+  bankAccountId: Joi.string().optional().allow(null, '').messages({
     'string.base': 'User ID must be a valid UUID',
     'string.required': 'User ID is required',
     'string.uuid': 'User ID must be a valid UUID'

@@ -12,6 +12,8 @@ class Config {
   public CLOUD_API_SECRET: string | undefined;
   public CLOUD_FOLDER: string | undefined;
   public CLIENT_URL: string | undefined;
+  public MOMO_ACCESS_KEY: string | undefined;
+  public MOMO_SECRET_KEY: string | undefined;
 
   constructor() {
     this.MYSQL_DB = process.env.MYSQL_DB;
@@ -24,6 +26,8 @@ class Config {
     this.CLOUD_API_KEY = process.env.CLOUD_API_KEY;
     this.CLOUD_API_SECRET = process.env.CLOUD_API_SECRET;
     this.CLIENT_URL = process.env.CLIENT_URL;
+    this.MOMO_ACCESS_KEY = process.env.MOMO_ACCESS_KEY;
+    this.MOMO_SECRET_KEY = process.env.MOMO_SECRET_KEY;
   }
 
   public cloudinaryConfig(): void {
