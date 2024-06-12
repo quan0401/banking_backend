@@ -11,11 +11,13 @@ class TransactionRoutes {
     this.router = Router();
   }
   public routes(): Router {
+    this.router.post('/transaction/check-payment-status', Pay.prototype.checkPaymentStatus);
     this.router.post('/transaction/pay/:savingPlanId', Pay.prototype.pay);
     this.router.post('/transaction/withdraw/:savingPlanId', Withdraw.prototype.withdraw);
+
+    this.router.get('/transaction/all/savingPlan/:savingPlanId/user', GetTransactionHistory.prototype.transactionByPlanIdAndUserId);
     this.router.get('/transaction/savingPlan/:savingPlanId', GetTransactionHistory.prototype.transactionsByPlanId);
     this.router.get('/transaction/all', GetTransactionHistory.prototype.all);
-    this.router.post('/transaction/check-payment-status', Pay.prototype.checkPaymentStatus);
 
     return this.router;
   }

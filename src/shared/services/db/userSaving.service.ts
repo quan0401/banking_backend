@@ -10,7 +10,6 @@ class UserSavingService {
   // topUpMoney
   // withdrawMoney
   // isValidAction (private)
-
   public async topUpMoney(userId: string, savingPlanId: string, amount: number): Promise<IUserSavingDocument> {
     let currentUserSaving: Model | null = await UserSavingModel.findOne({
       where: {
@@ -112,6 +111,25 @@ class UserSavingService {
         break;
     }
     return true;
+  }
+
+  public async getUserSaving(userId: string, savingPlanId: string): Promise<IUserSavingDocument | undefined> {
+    const userSaving: Model | null = await UserSavingModel.findOne({
+      where: {
+        userId,
+        savingPlanId
+      }
+    });
+    return userSaving?.dataValues;
+  }
+
+  public async getUserSavingByUserId(userId: string): Promise<IUserSavingDocument[]> {
+    const userSaving: Model[] = await UserSavingModel.findAll({
+      where: {
+        userId
+      }
+    });
+    return userSaving.map((saving) => saving.dataValues);
   }
 }
 export const userSavingService: UserSavingService = new UserSavingService();

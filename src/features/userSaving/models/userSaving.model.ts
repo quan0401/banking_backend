@@ -35,7 +35,7 @@ export const UserSavingModel: ModelDefined<IUserSavingDocument, IUserSavingCreat
         }
       }
     },
-    lastUpdated: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: new Date() // Default to current date and time
@@ -51,9 +51,11 @@ export const UserSavingModel: ModelDefined<IUserSavingDocument, IUserSavingCreat
     }
   },
   {
-    timestamps: false,
-    version: true
+    version: true,
+    timestamps: true
   }
 );
 
-UserSavingModel.sync({});
+UserSavingModel.sync({
+  // force: true
+});

@@ -70,14 +70,11 @@ class TransactionService {
       );
 
       if (updated[0] === 0) return;
-      console.log('updated:::::', updated[0]);
-      console.log('transaction:::::', transaction);
       const userSaving: IUserSavingDocument = await userSavingService.topUpMoney(
         userId,
         savingPlanId,
         transaction.dataValues.amount as number
       );
-      console.log('userSaving:::::', userSaving);
       return { transaction: transaction.dataValues, userSaving };
     }
   }
@@ -145,7 +142,10 @@ class TransactionService {
         },
         order: [['transactionDate', 'DESC']]
       })
-    ).map((tran) => tran.dataValues);
+    ).map((tran) => {
+      const value = tran.dataValues;
+      return value;
+    });
     return transactions;
   }
 

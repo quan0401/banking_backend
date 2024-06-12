@@ -4,6 +4,7 @@ import { verifyUser } from '~global/helpers/auth-middleware';
 import { savingPlanRoutes } from '~savingPlan/routes/savingPlan.routes';
 import { bankRoutes } from '~transaction/routes/bank.routes';
 import { transactionRoutes } from '~transaction/routes/transaction.routes';
+import { userSavingRoutes } from '~userSaving/routes/userSaving.routes';
 
 const BASE_URL = '/api/v1';
 export default (app: Application) => {
@@ -13,6 +14,7 @@ export default (app: Application) => {
     app.use(BASE_URL, verifyUser, savingPlanRoutes.routes());
     app.use(BASE_URL, verifyUser, bankRoutes.routes());
     app.use(BASE_URL, verifyUser, transactionRoutes.routes());
+    app.use(BASE_URL, verifyUser, userSavingRoutes.routes());
   };
   routes();
 };

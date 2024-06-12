@@ -4,6 +4,7 @@ import { CreateSavingPlan } from '~savingPlan/controllers/createSavingPlan';
 import { DeleteSavingPlan } from '~savingPlan/controllers/deleteSavingPlan';
 import { GetSavingPlan } from '~savingPlan/controllers/getSavingPlan';
 import { UpdateSavingPlan } from '~savingPlan/controllers/updateSavingPlan';
+import { GetUserSaving } from '~userSaving/controllers/getUserSaving';
 
 class UserSavingRoutes {
   private router: Router;
@@ -12,12 +13,8 @@ class UserSavingRoutes {
     this.router = Router();
   }
   public routes(): Router {
-    this.router.get('/savingPlan/:planId', GetSavingPlan.prototype.getById);
-    this.router.get('/savingPlan', GetSavingPlan.prototype.all);
-
-    this.router.post('/savingPlan', verifyAdmin, CreateSavingPlan.prototype.create);
-    this.router.put('/savingPlan/:planId', verifyAdmin, UpdateSavingPlan.prototype.byId);
-    this.router.delete('/savingPlan/:planId', verifyAdmin, DeleteSavingPlan.prototype.byId);
+    this.router.get('/userSaving/:userId', GetUserSaving.prototype.getByUserId);
+    this.router.get('/userSaving/:userId/:savingPlanId', GetUserSaving.prototype.getBySavingPlanId);
 
     return this.router;
   }
