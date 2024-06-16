@@ -3,7 +3,7 @@ version: '3.9'
 services:
   banking_db:
     container_name: mysql_banking
-    image: mysql
+    image: mysql:8:3:0
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
@@ -14,4 +14,4 @@ services:
       MYSQL_DATABASE: bank
       MYSQL_PASSWORD: api
     volumes:
-      - ./docker-volumes/mysql:/var/lib/mysql
+      - ./docker-volumes/mysql:/var/li

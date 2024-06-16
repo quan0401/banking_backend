@@ -11,6 +11,19 @@ class AuthService {
     return result;
   }
 
+  public async updateAuthInfo(authId: Required<IAuthDocument>['id'], data: Partial<IAuthDocument>): Promise<IAuthDocument | undefined> {
+    const user: Model | null = await AuthModel.findOne({
+      where: {
+        id: authId
+      }
+    });
+    if (user) {
+      await user.update(data);
+      await user.save();
+    }
+    return user?.dataValues;
+  }
+
   public async findUserById(id: string): Promise<IAuthDocument | undefined> {
     // const user: Model | null = await AuthModel.scope('withAdmin').findOne({
     const user: Model | null = await AuthModel.findByPk(id);

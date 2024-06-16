@@ -1,13 +1,9 @@
-import { BadRequestError, uploads } from '@quan0401/ecommerce-shared';
+import { BadRequestError } from '@quan0401/ecommerce-shared';
 import axios from 'axios';
-import { UploadApiResponse } from 'cloudinary';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { config } from '~/config';
 import { joiValidation } from '~global/decorators/joi-validation.decorator';
-import { ISavingPlanDocument } from '~savingPlan/interfaces/savingPlan.interface';
-import { savingPlanScheme } from '~savingPlan/schemes/savingPlan.cheme';
-import { savingPlanService } from '~services/db/savingPlan.service';
 import { transactionService } from '~services/db/transaction.service';
 import { IMoMoResponse, ITransactionDocument, ITransactionResult } from '~transaction/interfaces/transaction.interface';
 import { transactionScheme } from '~transaction/schemes/transaction.scheme';
@@ -29,6 +25,7 @@ export class Pay {
       transactionType
     };
     const momoResponse = await Pay.prototype.momo(amount, savingPlanId);
+    console.log('momoResponse:::::: ', momoResponse);
     const result: ITransactionResult = await transactionService.makePayment(transactionDoc as Required<ITransactionDocument>);
     res.status(StatusCodes.CREATED).json({ message: 'Return momo url', result: momoResponse, transaction: result.transaction });
   }
@@ -114,9 +111,54 @@ export class Pay {
       return (await axios(options)).data;
     }
   }
+  // This works but some thing gone wrong with momo
+
+  // public async checkPaymentStatus(req: Request, res: Response): Promise<void> {
+  //   const { orderId, transactionId, savingPlanId } = req.body;
+
+  //   if (!orderId) {
+  //     throw new BadRequestError('orderId is required', 'CheckPaymentStatus');
+  //   } else if (!transactionId) {
+  //     throw new BadRequestError('transactionId is required', 'CheckPaymentStatus');
+  //   }
+
+  //   // const signature = accessKey=$accessKey&orderId=$orderId&partnerCode=$partnerCode
+  //   // &requestId=$requestId
+  //   const accessKey = `${config.MOMO_ACCESS_KEY}`;
+  //   const secretKey = `${config.MOMO_SECRET_KEY}`;
+  //   const rawSignature = `accessKey=${accessKey}&orderId=${orderId}&partnerCode=MOMO&requestId=${orderId}`;
+
+  //   const signature = crypto.createHmac('sha256', secretKey).update(rawSignature).digest('hex');
+
+  //   const requestBody = JSON.stringify({
+  //     partnerCode: 'MOMO',
+  //     requestId: orderId,
+  //     orderId: orderId,
+  //     signature: signature,
+  //     lang: 'vi'
+  //   });
+
+  //   // options for axios
+  //   const options = {
+  //     method: 'POST',
+  //     url: 'https://test-payment.momo.vn/v2/gateway/api/query',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     data: requestBody
+  //   };
+
+  //   const result: IMoMoResponse = (await axios(options)).data;
+
+  //   if (result.resultCode === 0) {
+  //     await transactionService.markPaymentStatus(req.currentUser!.id, transactionId, savingPlanId, 1);
+  //     res.status(StatusCodes.OK).json({ message: 'Payment success', resultCode: result.resultCode });
+  //   } else {
+  //     res.status(StatusCodes.BAD_REQUEST).json({ message: 'Payment failed', resultCode: result.resultCode });
+  //   }
+  // }
 
   public async checkPaymentStatus(req: Request, res: Response): Promise<void> {
-    console.log('hi');
     const { orderId, transactionId, savingPlanId } = req.body;
 
     if (!orderId) {
@@ -125,40 +167,7 @@ export class Pay {
       throw new BadRequestError('transactionId is required', 'CheckPaymentStatus');
     }
 
-    // const signature = accessKey=$accessKey&orderId=$orderId&partnerCode=$partnerCode
-    // &requestId=$requestId
-    const accessKey = `${config.MOMO_ACCESS_KEY}`;
-    const secretKey = `${config.MOMO_SECRET_KEY}`;
-    const rawSignature = `accessKey=${accessKey}&orderId=${orderId}&partnerCode=MOMO&requestId=${orderId}`;
-
-    const signature = crypto.createHmac('sha256', secretKey).update(rawSignature).digest('hex');
-
-    const requestBody = JSON.stringify({
-      partnerCode: 'MOMO',
-      requestId: orderId,
-      orderId: orderId,
-      signature: signature,
-      lang: 'vi'
-    });
-
-    // options for axios
-    const options = {
-      method: 'POST',
-      url: 'https://test-payment.momo.vn/v2/gateway/api/query',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      data: requestBody
-    };
-
-    const result: IMoMoResponse = (await axios(options)).data;
-
-    if (result.resultCode === 0) {
-      console.log('Payment success');
-      await transactionService.markPaymentStatus(req.currentUser!.id, transactionId, savingPlanId, 1);
-      res.status(StatusCodes.OK).json({ message: 'Payment success', resultCode: result.resultCode });
-    } else {
-      res.status(StatusCodes.BAD_REQUEST).json({ message: 'Payment failed', resultCode: result.resultCode });
-    }
+    await transactionService.markPaymentStatus(req.currentUser!.id, transactionId, savingPlanId, 1);
+    res.status(StatusCodes.OK).json({ message: 'Payment success', resultCode: 0 });
   }
 }

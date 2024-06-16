@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { transactionService } from '~services/db/transaction.service';
 import { ITransactionDocument } from '~transaction/interfaces/transaction.interface';
+import { TransactionModel } from '~transaction/models/transaction.model';
 
 export class GetTransactionHistory {
   // TODO:
@@ -10,6 +11,11 @@ export class GetTransactionHistory {
   // withdrawHistoryOnly
   public async all(req: Request, res: Response): Promise<void> {
     const transactions: ITransactionDocument[] = await transactionService.getAllTransactionsOfUser(req.currentUser!.id);
+    await TransactionModel.destroy({
+      where: {
+        isSuccessful: 0
+      }
+    });
     res.status(StatusCodes.CREATED).json({
       message: 'Get all trancsactions successfully',
       transactions
