@@ -41,7 +41,6 @@ export class AppServer {
     app.use(urlencoded({ extended: true, limit: '200mb' }));
   }
   private securityMiddleware(app: Application): void {
-    console.log(config.NODE_ENV);
     app.use(
       cookieSession({
         name: 'session',
@@ -74,7 +73,7 @@ export class AppServer {
 
       if (err instanceof CustomeError) {
         // Send back to the client
-        return res.status(StatusCodes.BAD_REQUEST).json(err.serializeError());
+        return res.status(err.serializeError().statusCode).json(err.serializeError());
       } else {
         log.error(err);
       }

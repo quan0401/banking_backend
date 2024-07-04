@@ -46,3 +46,10 @@ withCredentials: true
 
 {}
 
+###
+GET {{baseUrl}}/{{urlPath}}/transaction/byDate/2024-06-11/2024-06-30
+Content-Type: application/json
+withCredentials: true
+
+{}
+

@@ -3,6 +3,7 @@ import { DataTypes, Optional, ModelDefined, CreateOptions, Model, FindAttributeO
 import { compare, hash } from 'bcryptjs';
 import { sequelize } from '~/database';
 import { v4 as uuidv4 } from 'uuid';
+import { TransactionModel } from '~transaction/models/transaction.model';
 
 const SALT_ROUND = 10;
 interface AuthModelInstanceMethods extends Model {
@@ -73,7 +74,7 @@ export const AuthModel: ModelDefined<IAuthDocument, AuthCreationAttributes> & Au
     emailVerified: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: false
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -122,6 +123,10 @@ export const AuthModel: ModelDefined<IAuthDocument, AuthCreationAttributes> & Au
     ]
   }
 ) as ModelDefined<IAuthDocument, AuthCreationAttributes> & AuthModelInstanceMethods;
+
+// Step 1: Define associations (if not already done)
+AuthModel.hasMany(TransactionModel, { foreignKey: 'userId' });
+TransactionModel.belongsTo(AuthModel, { foreignKey: 'userId' });
 
 AuthModel.addHook('beforeCreate', async (auth: Model, options: CreateOptions) => {
   const hashedPassword = await hash(auth.dataValues.password, SALT_ROUND);

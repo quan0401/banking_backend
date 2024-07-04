@@ -133,6 +133,7 @@ class TransactionService {
     ).map((tran) => tran.dataValues);
     return transactions;
   }
+
   public async getTransactionsOfUserBySavingPlan(userId: string, savingPlanId: string): Promise<ITransactionDocument[]> {
     const transactions: ITransactionDocument[] = (
       await TransactionModel.findAll({
@@ -146,6 +147,26 @@ class TransactionService {
       const value = tran.dataValues;
       return value;
     });
+    return transactions;
+  }
+
+  public async getTransactionsByDate(userId: string, startDate: Date, endDate: Date): Promise<ITransactionDocument[]> {
+    // Set startDate to the beginning of the day
+    startDate.setHours(0, 0, 0, 0);
+    // Set endDate to the end of the day
+    endDate.setHours(23, 59, 59, 999);
+
+    const transactions: ITransactionDocument[] = (
+      await TransactionModel.findAll({
+        where: {
+          userId,
+          transactionDate: {
+            [Op.between]: [startDate, endDate]
+          }
+        },
+        order: [['transactionDate', 'DESC']]
+      })
+    ).map((tran) => tran.dataValues);
     return transactions;
   }
 

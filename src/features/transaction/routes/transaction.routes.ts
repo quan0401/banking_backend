@@ -16,7 +16,10 @@ class TransactionRoutes {
     this.router.post('/transaction/withdraw/:savingPlanId', Withdraw.prototype.withdraw);
 
     this.router.get('/transaction/all/savingPlan/:savingPlanId/user', GetTransactionHistory.prototype.transactionByPlanIdAndUserId);
+    this.router.get('/transaction/byDate/:startDate/:endDate', GetTransactionHistory.prototype.transactionsByDate);
     this.router.get('/transaction/savingPlan/:savingPlanId', GetTransactionHistory.prototype.transactionsByPlanId);
+    this.router.get('/transaction/user/:userId', GetTransactionHistory.prototype.getTransactionsOfUser);
+
     this.router.get('/transaction/all', GetTransactionHistory.prototype.all);
 
     return this.router;

@@ -45,4 +45,26 @@ export class GetTransactionHistory {
       transactions
     });
   }
+
+  public async getTransactionsOfUser(req: Request, res: Response): Promise<void> {
+    const { userId } = req.params;
+    const transactions: ITransactionDocument[] = await transactionService.getAllTransactionsOfUser(userId);
+    res.status(StatusCodes.CREATED).json({
+      message: 'Get all trancsactions of user successfully',
+      transactions
+    });
+  }
+
+  public async transactionsByDate(req: Request, res: Response): Promise<void> {
+    const { startDate, endDate } = req.params;
+    const transactions: ITransactionDocument[] = await transactionService.getTransactionsByDate(
+      req.currentUser!.id,
+      new Date(startDate),
+      new Date(endDate)
+    );
+    res.status(StatusCodes.CREATED).json({
+      message: 'Get all trancsactions by date successfully',
+      transactions
+    });
+  }
 }

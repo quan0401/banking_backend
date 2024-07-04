@@ -1,4 +1,5 @@
 import { Application } from 'express';
+import { adminRoutes } from '~auth/routes/admin.routes';
 import { authRoutes } from '~auth/routes/auth.routes';
 import { verifyUser } from '~global/helpers/auth-middleware';
 import { savingPlanRoutes } from '~savingPlan/routes/savingPlan.routes';
@@ -15,6 +16,7 @@ export default (app: Application) => {
     app.use(BASE_URL, verifyUser, bankRoutes.routes());
     app.use(BASE_URL, verifyUser, transactionRoutes.routes());
     app.use(BASE_URL, verifyUser, userSavingRoutes.routes());
+    app.use(BASE_URL, verifyUser, adminRoutes.routes());
   };
   routes();
 };

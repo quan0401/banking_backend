@@ -1,7 +1,9 @@
 import { omit } from 'lodash';
-import { Model, Op } from 'sequelize'; // Import ValidationError from Sequelize
+import { Model, Op, Sequelize } from 'sequelize'; // Import ValidationError from Sequelize
+import { sequelize } from '~/database';
 import { IAuthDocument } from '~auth/interfaces/auth.interface';
 import { AuthModel } from '~auth/models/auth.model';
+import { TransactionModel } from '~transaction/models/transaction.model';
 
 class AuthService {
   public async createNewUser(data: IAuthDocument): Promise<IAuthDocument> {
@@ -26,13 +28,13 @@ class AuthService {
 
   public async findUserById(id: string): Promise<IAuthDocument | undefined> {
     // const user: Model | null = await AuthModel.scope('withAdmin').findOne({
-    const user: Model | null = await AuthModel.findByPk(id);
+    const user: Model | null = await AuthModel.scope('withAdmin').findByPk(id);
     return user?.dataValues;
   }
 
   public async findUserByEmailOrPhone(phone: string, email: string): Promise<IAuthDocument | undefined> {
     // const user: Model | null = await AuthModel.scope('withAdmin').findOne({
-    const user: Model | null = await AuthModel.findOne({
+    const user: Model | null = await AuthModel.scope('withAdmin').findOne({
       where: {
         [Op.or]: [{ email: email ? email : '' }, { phone: phone ? phone : '' }]
       }
@@ -69,6 +71,76 @@ class AuthService {
       }
     });
     return user?.dataValues.isAdmin === 1;
+  }
+
+  // public async getUsersPagination(limit: number, offset: number): Promise<IAuthDocument[]> {
+  //   const usersWithTransactions = await AuthModel.findAll({
+  //     attributes: [
+  //       'id',
+  //       'username',
+  //       'email',
+  //       [Sequelize.fn('COUNT', Sequelize.col('transactions.id')), 'transactionCount'],
+  //       [Sequelize.literal(`SUM(CASE WHEN transactions.transactionType = 1 THEN transactions.amount ELSE 0 END)`), 'totalTopUpAmount'],
+  //       [Sequelize.literal(`SUM(CASE WHEN transactions.transactionType = -1 THEN transactions.amount ELSE 0 END)`), 'totalWithdrawalAmount']
+  //     ],
+  //     include: [
+  //       {
+  //         model: TransactionModel,
+  //         as: 'transactions',
+  //         attributes: [] // Do not include any attributes from the transactions table in the final output
+  //       }
+  //     ],
+  //     group: ['auths.id'], // Grouping by AuthModel entries
+  //     order: [
+  //       ['totalTopUpAmount', 'DESC'] // Ordering AuthModel entries
+  //     ],
+  //     limit,
+  //     offset
+  //   });
+  //   const result = usersWithTransactions.map((user: Model) => user.toJSON());
+
+  //   return result;
+  // }
+
+  public async getUsersPagination(
+    limit: number,
+    offset: number
+  ): Promise<{
+    total: number;
+    users: IAuthDocument[];
+  }> {
+    const query = `
+    SELECT
+      auths.id,
+      auths.username,
+      auths.email,
+      COUNT(transactions.id) AS transactionCount,
+      SUM(CASE WHEN transactions.transactionType = 1 THEN transactions.amount ELSE 0 END) AS totalTopUpAmount,
+      SUM(CASE WHEN transactions.transactionType = -1 THEN transactions.amount ELSE 0 END) AS totalWithdrawalAmount
+    FROM
+      auths
+    LEFT JOIN
+      transactions ON auths.id = transactions.userId
+    GROUP BY
+      auths.id, auths.username, auths.email
+    ORDER BY
+      totalTopUpAmount DESC
+    LIMIT
+      :limit OFFSET :offset;
+  `;
+
+    const usersWithTransactions = await sequelize.query(query, {
+      replacements: { limit, offset },
+      model: AuthModel,
+      mapToModel: true // Maps the results to models. Ensure this matches your actual model and query structure.
+    });
+    const total = await AuthModel.count();
+    const users = usersWithTransactions.map((user: Model) => user.toJSON());
+
+    return {
+      total,
+      users
+    };
   }
 }
 export const authService: AuthService = new AuthService();

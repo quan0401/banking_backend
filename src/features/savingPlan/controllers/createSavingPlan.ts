@@ -2,7 +2,6 @@ import { BadRequestError, uploads } from '@quan0401/ecommerce-shared';
 import { UploadApiResponse } from 'cloudinary';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { config } from '~/config';
 import { joiValidation } from '~global/decorators/joi-validation.decorator';
 import { ISavingPlanDocument } from '~savingPlan/interfaces/savingPlan.interface';
 import { savingPlanScheme } from '~savingPlan/schemes/savingPlan.cheme';
@@ -28,8 +27,8 @@ export class CreateSavingPlan {
       currency,
       image
     } = req.body;
-    const uploadResult: UploadApiResponse = (await uploads(image, config.CLOUD_FOLDER!)) as UploadApiResponse;
-    if (!uploadResult.public_id) throw new BadRequestError('File upload error', 'SignUp create() method error');
+    // const uploadResult: UploadApiResponse = (await uploads(image, config.CLOUD_FOLDER!)) as UploadApiResponse;
+    // if (!uploadResult.public_id) throw new BadRequestError('File upload error', 'SignUp create() method error');
     const savingPlanDocument: ISavingPlanDocument = {
       termPeriod,
       minimumBalance: parseInt(minimumBalance, 10),
@@ -45,7 +44,7 @@ export class CreateSavingPlan {
       startDate: new Date(startDate),
       endDate: endDate ? new Date(startDate) : null,
       currency,
-      image: uploadResult.secure_url
+      image
     };
     const savingPlan: ISavingPlanDocument = await savingPlanService.create(savingPlanDocument);
     res.status(StatusCodes.CREATED).json({ message: 'Created Saving Plan successfully', savingPlan });

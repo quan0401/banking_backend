@@ -9,5 +9,22 @@ import { authService } from '~services/db/auth.service';
 
 export class Admin {
   @joiValidation(loginSchema)
+  // get users
   public async requestToBecomeAdmin(req: Request, res: Response): Promise<void> {}
+  public async getUsers(req: Request, res: Response): Promise<void> {
+    const { limit, offset } = req.params;
+    const result = await authService.getUsersPagination(parseInt(`${limit}`), parseInt(`${offset}`));
+    res.status(StatusCodes.CREATED).json({
+      message: 'Get users successfully',
+      ...result
+    });
+  }
+  public async getUserById(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+    const user = await authService.findUserById(id);
+    res.status(StatusCodes.OK).json({
+      message: 'Get user successfully',
+      user
+    });
+  }
 }

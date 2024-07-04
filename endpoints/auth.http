@@ -52,3 +52,17 @@ withCredentials: true
 {
   "token": "6941c725e8b108d4b6c7c2bc89a2c3c7fb287f79"
 }
+
+###
+GET {{baseUrl}}/{{urlPath}}/admin/auth/0/10
+Content-Type: application/json
+withCredentials: true
+
+{}
+
+###
+POST {{baseUrl}}/{{urlPath}}/admin/auth/seed/10
+Content-Type: application/json
+withCredentials: true
+
+{}
